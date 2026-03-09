@@ -1,21 +1,23 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { CreateSubscriberDto } from './dto/create-subscriber.dto';
 import { UpdateSubscriberDto } from './dto/update-subscriber.dto';
 import { IUser } from 'src/users/users.interface';
 import { InjectModel } from '@nestjs/mongoose';
 import { Subscriber, SubscriberDocument } from './schemas/subscriber.schema';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
+import { MailService } from 'src/mail/mail.service';
 import aqp from 'api-query-params';
 import mongoose from 'mongoose';
 
 @Injectable()
 export class SubscribersService {
+  private readonly logger = new Logger(SubscribersService.name);
+
   constructor(
-
-
+    private readonly mailService: MailService,
     @InjectModel(Subscriber.name)
-    private subscriberModel: SoftDeleteModel<SubscriberDocument>
-  ) { }
+    private subscriberModel: SoftDeleteModel<SubscriberDocument>,
+  ) {}
 
   async create(createSubscriberDto: CreateSubscriberDto, user: IUser) {
     const { name, email, skills } = createSubscriberDto;
@@ -80,17 +82,26 @@ export class SubscribersService {
   }
 
   async update(updateSubscriberDto: UpdateSubscriberDto, user: IUser) {
-    const updated = await this.subscriberModel.updateOne(
+    const updated = await this.subscriberModel.findOneAndUpdate(
       { email: user.email },
       {
         ...updateSubscriberDto,
         updatedBy: {
           _id: user._id,
-          email: user.email
-        }
+          email: user.email,
+        },
       },
-      { upsert: true }
+      { upsert: true, new: true, setDefaultsOnInsert: true },
     );
+
+    try {
+      if (updated) {
+        await this.mailService.sendJobsToSubscriber(updated);
+      }
+    } catch (error) {
+      this.logger.error('Failed to send job email after subscriber update', error as any);
+    }
+
     return updated;
   }
 

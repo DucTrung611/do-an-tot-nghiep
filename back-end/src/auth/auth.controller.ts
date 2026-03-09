@@ -8,6 +8,7 @@ import { IUser } from 'src/users/users.interface';
 import { ThrottlerGuard, Throttle } from '@nestjs/throttler';
 import { ApiTags, ApiBody } from '@nestjs/swagger';
 import { UpdateAccountDto } from './dto/update-account.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @ApiTags('auth')
 @Controller("auth")
@@ -50,6 +51,15 @@ export class AuthController {
         @User() user: IUser
     ) {
         return this.authService.updateAccount(updateAccountDto, user);
+    }
+
+    @ResponseMessage("Change user password")
+    @Patch('/account/password')
+    async handleChangePassword(
+        @Body() changePasswordDto: ChangePasswordDto,
+        @User() user: IUser
+    ) {
+        return this.authService.changePassword(changePasswordDto, user);
     }
 
     @Public()

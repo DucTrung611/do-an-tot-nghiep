@@ -5,6 +5,6 @@ export class AppService {
   getHello(): string {
 
     //model : code
-    return 'Hello World! & Hỏi Dân IT';
+    return 'Hello World!';
   }
 }

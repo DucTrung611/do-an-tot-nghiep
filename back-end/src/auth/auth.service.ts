@@ -8,6 +8,7 @@ import ms from 'ms';
 import { Response } from 'express';
 import { RolesService } from 'src/roles/roles.service';
 import { UpdateAccountDto } from './dto/update-account.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -180,6 +181,30 @@ export class AuthService {
     updateAccount = async (updateAccountDto: UpdateAccountDto, user: IUser) => {
         const { name, age, address } = updateAccountDto;
         return this.usersService.updateAccount(user._id, { name, age, address }, user);
+    }
+
+    changePassword = async (changePasswordDto: ChangePasswordDto, user: IUser) => {
+        const { oldPassword, newPassword, confirmPassword } = changePasswordDto;
+
+        if (newPassword !== confirmPassword) {
+            throw new BadRequestException('Xác nhận mật khẩu không khớp');
+        }
+
+        const foundUser = await this.usersService.findOneWithPassword(user._id) as any;
+        if (!foundUser) {
+            throw new BadRequestException('Người dùng không tồn tại');
+        }
+
+        if (!foundUser.password) {
+            throw new BadRequestException('Không thể xác thực mật khẩu (thiếu dữ liệu)');
+        }
+
+        const isOldPasswordValid = this.usersService.isValidPassword(oldPassword, foundUser.password);
+        if (!isOldPasswordValid) {
+            throw new BadRequestException('Mật khẩu cũ không đúng');
+        }
+
+        return this.usersService.updatePassword(user._id, newPassword, user);
     }
 
 }

@@ -21,6 +21,14 @@ export const callUpdateAccount = (data: { name: string; age: number; address: st
     return axios.patch<IBackendRes<IUser>>('/api/v1/auth/account', data)
 }
 
+export const callChangePassword = (oldPassword: string, newPassword: string, confirmPassword: string) => {
+    return axios.patch<IBackendRes<any>>('/api/v1/auth/account/password', {
+        oldPassword,
+        newPassword,
+        confirmPassword,
+    });
+}
+
 export const callRefreshToken = () => {
     return axios.get<IBackendRes<IAccount>>('/api/v1/auth/refresh')
 }

@@ -128,6 +128,18 @@ export class UsersService {
     //exclude >< include
   }
 
+  /**
+   * Get user with password field (used for authentication / password change)
+   */
+  async findOneWithPassword(id: string) {
+    if (!mongoose.Types.ObjectId.isValid(id))
+      return `not found user`;
+
+    return await this.userModel.findOne({
+      _id: id
+    }).populate({ path: "role", select: { name: 1, _id: 1 } });
+  }
+
   findOneByUsername(username: string) {
     return this.userModel.findOne({
       email: username
@@ -170,6 +182,21 @@ export class UsersService {
           _id: user._id,
           email: user.email
         }
+      }
+    );
+    return updated;
+  }
+
+  async updatePassword(id: string, newPassword: string, user: IUser) {
+    const hashPassword = this.getHashPassword(newPassword);
+    const updated = await this.userModel.updateOne(
+      { _id: id },
+      {
+        password: hashPassword,
+        updatedBy: {
+          _id: user._id,
+          email: user.email,
+        },
       }
     );
     return updated;

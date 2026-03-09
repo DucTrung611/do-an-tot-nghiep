@@ -46,7 +46,7 @@ const Header = (props: any) => {
             icon: <TwitterOutlined />,
         },
         {
-            label: <Link to={"/job"}>Việc Làm IT</Link>,
+            label: <Link to={"/job"}>Tìm Việc Làm</Link>,
             key: "/job",
             icon: <CodeOutlined />,
         },
@@ -118,12 +118,13 @@ const Header = (props: any) => {
                 <div className={styles["container"]}>
                     {!isMobile ? (
                         <div style={{ display: "flex", gap: 30 }}>
-                            <div className={styles["brand"]}>
+                            {/* <div className={styles["brand"]}>
                                 <FaReact
                                     onClick={() => navigate("/")}
-                                    title="Hỏi Dân IT"
+                                    title="Trang chủ"
                                 />
-                            </div>
+                            </div> */}
+                            {/* <div>Job Connect</div> */}
                             <div className={styles["top-menu"]}>
                                 <ConfigProvider
                                     theme={{
