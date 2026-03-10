@@ -13,8 +13,8 @@ export class UsersController {
 
   @Post()
   @ResponseMessage("Create a new User")
-  async create(@Body() hoidanit: CreateUserDto, @User() user: IUser) {
-    let newUser = await this.usersService.create(hoidanit, user);
+  async create(@Body() createUserDto: CreateUserDto, @User() user: IUser) {
+    let newUser = await this.usersService.create(createUserDto, user);
     return {
       _id: newUser?._id,
       createdAt: newUser?.createdAt
