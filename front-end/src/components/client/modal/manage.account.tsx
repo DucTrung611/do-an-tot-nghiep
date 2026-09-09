@@ -382,7 +382,7 @@ const JobByEmail = (props: any) => {
                             <Select
                                 mode="multiple"
                                 allowClear
-                                showArrow={false}
+                                suffixIcon={null}
                                 style={{ width: "100%" }}
                                 placeholder={
                                     <>
@@ -439,9 +439,9 @@ const ManageAccount = (props: IProps) => {
                 title="Quản lý tài khoản"
                 open={open}
                 onCancel={() => onClose(false)}
-                maskClosable={false}
+                mask={{ closable: false }}
                 footer={null}
-                destroyOnClose={true}
+                destroyOnHidden={true}
                 width={isMobile ? "100%" : "1000px"}
             >
                 <div style={{ minHeight: 400 }}>

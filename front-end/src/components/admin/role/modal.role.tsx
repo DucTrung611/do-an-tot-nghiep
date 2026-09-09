@@ -138,10 +138,10 @@ const ModalRole = (props: IProps) => {
                 modalProps={{
                     onCancel: () => { handleReset() },
                     afterClose: () => handleReset(),
-                    destroyOnClose: true,
+                    destroyOnHidden: true,
                     width: isMobile ? "100%" : 900,
                     keyboard: false,
-                    maskClosable: false,
+                    mask: { closable: false },
 
                 }}
                 scrollToFirstError={true}
@@ -198,11 +198,11 @@ const ModalRole = (props: IProps) => {
                         <ProCard
                             title="Quyền hạn"
                             subTitle="Các quyền hạn được phép cho vai trò này"
-                            headStyle={{ color: '#d81921' }}
+                            styles={{ header: { color: '#d81921' } }}
                             style={{ marginBottom: 20 }}
                             headerBordered
                             size="small"
-                            bordered
+                            variant="outlined"
                         >
                             <ModuleApi
                                 form={form}

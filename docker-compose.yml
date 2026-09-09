@@ -1,0 +1,36 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: jobhub-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root123456
+      MONGO_INITDB_DATABASE: database
+    volumes:
+      - jobhub_mongo_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/database --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mongo-express:
+    image: mongo-express:1
+    container_name: jobhub-mongo-express
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root123456
+      ME_CONFIG_BASICAUTH: "false"
+
+volumes:
+  jobhub_mongo_data:

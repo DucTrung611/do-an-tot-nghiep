@@ -74,10 +74,10 @@ const ModalPermission = (props: IProps) => {
                 modalProps={{
                     onCancel: () => { handleReset() },
                     afterClose: () => handleReset(),
-                    destroyOnClose: true,
+                    destroyOnHidden: true,
                     width: isMobile ? "100%" : 900,
                     keyboard: false,
-                    maskClosable: false,
+                    mask: { closable: false },
                     okText: <>{dataInit?._id ? "Cập nhật" : "Tạo mới"}</>,
                     cancelText: "Hủy"
                 }}

@@ -20,7 +20,7 @@ const PermissionPage = () => {
     const [dataInit, setDataInit] = useState<IPermission | null>(null);
     const [openViewDetail, setOpenViewDetail] = useState<boolean>(false);
 
-    const tableRef = useRef<ActionType>();
+    const tableRef = useRef<ActionType>(undefined);
 
     const isFetching = useAppSelector(state => state.permission.isFetching);
     const meta = useAppSelector(state => state.permission.meta);
@@ -61,7 +61,7 @@ const PermissionPage = () => {
                     </a>
                 )
             },
-            hideInSearch: true,
+            search: false,
         },
         {
             title: 'Name',
@@ -98,7 +98,7 @@ const PermissionPage = () => {
                     <>{dayjs(record.createdAt).format('DD-MM-YYYY HH:mm:ss')}</>
                 )
             },
-            hideInSearch: true,
+            search: false,
         },
         {
             title: 'UpdatedAt',
@@ -110,12 +110,12 @@ const PermissionPage = () => {
                     <>{dayjs(record.updatedAt).format('DD-MM-YYYY HH:mm:ss')}</>
                 )
             },
-            hideInSearch: true,
+            search: false,
         },
         {
 
             title: 'Actions',
-            hideInSearch: true,
+            search: false,
             width: 50,
             render: (_value, entity, _index, _action) => (
                 <Space>

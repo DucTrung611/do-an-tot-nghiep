@@ -86,12 +86,12 @@ const ApplyModal = (props: IProps) => {
                 open={isModalOpen}
                 onOk={() => handleOkButton()}
                 onCancel={() => setIsModalOpen(false)}
-                maskClosable={false}
+                mask={{ closable: false }}
                 okText={isAuthenticated ? "Rải CV Nào " : "Đăng Nhập Nhanh"}
                 cancelButtonProps={
                     { style: { display: "none" } }
                 }
-                destroyOnClose={true}
+                destroyOnHidden={true}
             >
                 <Divider />
                 {isAuthenticated ?

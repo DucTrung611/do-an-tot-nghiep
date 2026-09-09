@@ -57,7 +57,7 @@ const SearchClient = (props: IProps) => {
                         <Select
                             mode="multiple"
                             allowClear
-                            showArrow={false}
+                            suffixIcon={null}
                             style={{ width: "100%" }}
                             placeholder={
                                 <>
@@ -74,7 +74,7 @@ const SearchClient = (props: IProps) => {
                         <Select
                             mode="multiple"
                             allowClear
-                            showArrow={false}
+                            suffixIcon={null}
                             style={{ width: "100%" }}
                             placeholder={
                                 <>

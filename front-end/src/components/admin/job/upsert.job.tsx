@@ -7,8 +7,8 @@ import { LOCATION_LIST, SKILLS_LIST } from "@/config/utils";
 import { ICompanySelect } from "../user/modal.user";
 import { useState, useEffect } from 'react';
 import { callCreateJob, callFetchCompany, callFetchJobById, callUpdateJob } from "@/config/api";
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 import { CheckSquareOutlined } from "@ant-design/icons";
 import enUS from 'antd/lib/locale/en_US';
 import dayjs from 'dayjs';
@@ -196,7 +196,7 @@ const ViewUpsertJob = (props: any) => {
                                     allowClear
                                     mode="multiple"
                                     fieldProps={{
-                                        showArrow: false
+                                        suffixIcon: null
                                     }}
 
                                 />
@@ -279,7 +279,7 @@ const ViewUpsertJob = (props: any) => {
                                 <ProFormDatePicker
                                     label="Ngày bắt đầu"
                                     name="startDate"
-                                    normalize={(value) => value && dayjs(value, 'DD/MM/YYYY')}
+                                    normalize={(value: any) => value && dayjs(value, 'DD/MM/YYYY')}
                                     fieldProps={{
                                         format: 'DD/MM/YYYY',
 
@@ -292,7 +292,7 @@ const ViewUpsertJob = (props: any) => {
                                 <ProFormDatePicker
                                     label="Ngày kết thúc"
                                     name="endDate"
-                                    normalize={(value) => value && dayjs(value, 'DD/MM/YYYY')}
+                                    normalize={(value: any) => value && dayjs(value, 'DD/MM/YYYY')}
                                     fieldProps={{
                                         format: 'DD/MM/YYYY',
 

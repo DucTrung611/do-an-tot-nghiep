@@ -17,7 +17,7 @@ const CompanyPage = () => {
     const [openModal, setOpenModal] = useState<boolean>(false);
     const [dataInit, setDataInit] = useState<ICompany | null>(null);
 
-    const tableRef = useRef<ActionType>();
+    const tableRef = useRef<ActionType>(undefined);
 
     const isFetching = useAppSelector(state => state.company.isFetching);
     const meta = useAppSelector(state => state.company.meta);
@@ -55,7 +55,7 @@ const CompanyPage = () => {
                         {(index + 1) + (meta.current - 1) * (meta.pageSize)}
                     </>)
             },
-            hideInSearch: true,
+            search: false,
         },
         {
             title: 'Id',
@@ -68,7 +68,7 @@ const CompanyPage = () => {
                     </span>
                 )
             },
-            hideInSearch: true,
+            search: false,
         },
         {
             title: 'Name',
@@ -91,7 +91,7 @@ const CompanyPage = () => {
                     <>{dayjs(record.createdAt).format('DD-MM-YYYY HH:mm:ss')}</>
                 )
             },
-            hideInSearch: true,
+            search: false,
         },
         {
             title: 'UpdatedAt',
@@ -103,12 +103,12 @@ const CompanyPage = () => {
                     <>{dayjs(record.updatedAt).format('DD-MM-YYYY HH:mm:ss')}</>
                 )
             },
-            hideInSearch: true,
+            search: false,
         },
         {
 
             title: 'Actions',
-            hideInSearch: true,
+            search: false,
             width: 50,
             render: (_value, entity, _index, _action) => (
                 <Space>

@@ -16,7 +16,7 @@ import Access from "@/components/share/access";
 const RolePage = () => {
     const [openModal, setOpenModal] = useState<boolean>(false);
 
-    const tableRef = useRef<ActionType>();
+    const tableRef = useRef<ActionType>(undefined);
 
     const isFetching = useAppSelector(state => state.role.isFetching);
     const meta = useAppSelector(state => state.role.meta);
@@ -54,7 +54,7 @@ const RolePage = () => {
                     </span>
                 )
             },
-            hideInSearch: true,
+            search: false,
         },
         {
             title: 'Name',
@@ -71,7 +71,7 @@ const RolePage = () => {
                     </Tag>
                 </>
             },
-            hideInSearch: true,
+            search: false,
         },
         {
             title: 'CreatedAt',
@@ -83,7 +83,7 @@ const RolePage = () => {
                     <>{dayjs(record.createdAt).format('DD-MM-YYYY HH:mm:ss')}</>
                 )
             },
-            hideInSearch: true,
+            search: false,
         },
         {
             title: 'UpdatedAt',
@@ -95,12 +95,12 @@ const RolePage = () => {
                     <>{dayjs(record.updatedAt).format('DD-MM-YYYY HH:mm:ss')}</>
                 )
             },
-            hideInSearch: true,
+            search: false,
         },
         {
 
             title: 'Actions',
-            hideInSearch: true,
+            search: false,
             width: 50,
             render: (_value, entity, _index, _action) => (
                 <Space>

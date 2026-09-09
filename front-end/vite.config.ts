@@ -24,11 +24,11 @@ export default defineConfig(({ command, mode }) => {
     },
     resolve: {
       alias: {
-        "@": path.resolve(__dirname, "./src/"),
-        components: `${path.resolve(__dirname, "./src/components/")}`,
-        styles: `${path.resolve(__dirname, "./src/styles/")}`,
-        config: `${path.resolve(__dirname, "./src/config/")}`,
-        pages: `${path.resolve(__dirname, "./src/pages/")}`,
+        "@": path.resolve(import.meta.dirname, "./src/"),
+        components: `${path.resolve(import.meta.dirname, "./src/components/")}`,
+        styles: `${path.resolve(import.meta.dirname, "./src/styles/")}`,
+        config: `${path.resolve(import.meta.dirname, "./src/config/")}`,
+        pages: `${path.resolve(import.meta.dirname, "./src/pages/")}`,
       },
     },
   }

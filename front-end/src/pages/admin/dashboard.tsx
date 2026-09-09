@@ -1,5 +1,8 @@
 import { Card, Col, Row, Skeleton, Statistic } from "antd";
-import CountUp from "react-countup";
+import CountUpImport from "react-countup";
+
+// Vite's dep optimizer double-wraps this package's CJS default export, so unwrap defensively.
+const CountUp = (CountUpImport as any)?.default ?? CountUpImport;
 import { useEffect, useState } from "react";
 import {
     callFetchCompany,
@@ -79,7 +82,7 @@ const DashboardPage = () => {
         <Row gutter={[20, 20]}>
             {metricCards.map((metric) => (
                 <Col key={metric.key} span={24} md={8}>
-                    <Card title={metric.title} bordered={false}>
+                    <Card title={metric.title} variant="borderless">
                         <Skeleton loading={isLoading} active>
                             <Statistic
                                 value={metric.value}

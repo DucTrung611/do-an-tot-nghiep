@@ -3,8 +3,8 @@ import { FooterToolbar, ModalForm, ProCard, ProFormText, ProFormTextArea } from 
 import { Col, ConfigProvider, Form, Modal, Row, Upload, message, notification } from "antd";
 import 'styles/reset.scss';
 import { isMobile } from 'react-device-detect';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 import { useEffect, useState } from "react";
 import { callCreateCompany, callUpdateCompany, callUploadSingleFile } from "@/config/api";
 import { ICompany } from "@/types/backend";
@@ -176,11 +176,11 @@ const ModalCompany = (props: IProps) => {
                         modalProps={{
                             onCancel: () => { handleReset() },
                             afterClose: () => handleReset(),
-                            destroyOnClose: true,
+                            destroyOnHidden: true,
                             width: isMobile ? "100%" : 900,
                             footer: null,
                             keyboard: false,
-                            maskClosable: false,
+                            mask: { closable: false },
                             className: `modal-company ${animation}`,
                             rootClassName: `modal-company-root ${animation}`
                         }}
@@ -273,11 +273,11 @@ const ModalCompany = (props: IProps) => {
                             <ProCard
                                 title="Miêu tả"
                                 // subTitle="mô tả công ty"
-                                headStyle={{ color: '#d81921' }}
+                                styles={{ header: { color: '#d81921' } }}
                                 style={{ marginBottom: 20 }}
                                 headerBordered
                                 size="small"
-                                bordered
+                                variant="outlined"
                             >
                                 <Col span={24}>
                                     <ReactQuill

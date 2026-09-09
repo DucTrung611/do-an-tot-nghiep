@@ -75,7 +75,7 @@ const JobCard = (props: IProps) => {
     return (
         <div className={`${styles["card-job-section"]}`}>
             <div className={`${styles["job-content"]}`}>
-                <Spin spinning={isLoading} tip="Loading...">
+                <Spin spinning={isLoading} description="Loading...">
                     <Row gutter={[20, 20]}>
                         <Col span={24}>
                             <div

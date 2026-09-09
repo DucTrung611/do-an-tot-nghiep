@@ -22,10 +22,13 @@ import { HealthModule } from './health/health.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
-    ThrottlerModule.forRoot({
-      ttl: 60,
-      limit: 10,
-    }),
+    ThrottlerModule.forRoot([
+      {
+        name: 'default',
+        ttl: 60000,
+        limit: 10,
+      },
+    ]),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({

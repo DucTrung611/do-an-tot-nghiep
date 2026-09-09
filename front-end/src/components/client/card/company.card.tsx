@@ -71,7 +71,7 @@ const CompanyCard = (props: IProps) => {
     return (
         <div className={`${styles["company-section"]}`}>
             <div className={styles["company-content"]}>
-                <Spin spinning={isLoading} tip="Loading...">
+                <Spin spinning={isLoading} description="Loading...">
                     <Row gutter={[20, 20]}>
                         <Col span={24}>
                             <div

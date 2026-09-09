@@ -27,7 +27,7 @@ import { ALL_PERMISSIONS } from "@/config/permissions";
 import Access from "@/components/share/access";
 
 const ResumePage = () => {
-    const tableRef = useRef<ActionType>();
+    const tableRef = useRef<ActionType>(undefined);
 
     const isFetching = useAppSelector((state) => state.resume.isFetching);
     const meta = useAppSelector((state) => state.resume.meta);
@@ -74,47 +74,49 @@ const ResumePage = () => {
                     </a>
                 );
             },
-            hideInSearch: true,
+            search: false,
         },
         {
             title: "Trạng Thái",
             dataIndex: "status",
             sorter: true,
-            renderFormItem: (item, props, form) => (
-                <ProFormSelect
-                    showSearch
-                    mode="multiple"
-                    allowClear
-                    valueEnum={{
-                        PENDING: "PENDING",
-                        REVIEWING: "REVIEWING",
-                        APPROVED: "APPROVED",
-                        REJECTED: "REJECTED",
-                    }}
-                    placeholder="Chọn level"
-                />
-            ),
+            ...({
+                renderFormItem: (item: any, props: any, form: any) => (
+                    <ProFormSelect
+                        showSearch
+                        mode="multiple"
+                        allowClear
+                        valueEnum={{
+                            PENDING: "PENDING",
+                            REVIEWING: "REVIEWING",
+                            APPROVED: "APPROVED",
+                            REJECTED: "REJECTED",
+                        }}
+                        placeholder="Chọn level"
+                    />
+                ),
+            } as any),
         },
 
         {
             title: "Job",
             dataIndex: ["jobId", "name"],
-            hideInSearch: true,
+            search: false,
         },
         {
             title: "Company",
             dataIndex: ["companyId", "name"],
-            hideInSearch: true,
+            search: false,
         },
         {
             title: "Người nộp",
             dataIndex: "email",
-            hideInSearch: true,
+            search: false,
         },
         {
             title: "Chi tiết CV",
             dataIndex: "url",
-            hideInSearch: true,
+            search: false,
             render: (_text, record) => {
                 return (
                     <a
@@ -138,7 +140,7 @@ const ResumePage = () => {
                     <>{dayjs(record.createdAt).format("DD-MM-YYYY HH:mm:ss")}</>
                 );
             },
-            hideInSearch: true,
+            search: false,
         },
         {
             title: "UpdatedAt",
@@ -150,12 +152,12 @@ const ResumePage = () => {
                     <>{dayjs(record.updatedAt).format("DD-MM-YYYY HH:mm:ss")}</>
                 );
             },
-            hideInSearch: true,
+            search: false,
         },
         // {
 
         //     title: 'Actions',
-        //     hideInSearch: true,
+        //     search: false,
         //     width: 50,
         //     render: (_value, entity, _index, _action) => (
         //         <Space>

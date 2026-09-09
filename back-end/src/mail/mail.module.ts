@@ -4,7 +4,7 @@ import { MailController } from './mail.controller';
 import { ConfigService } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { join } from 'path';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/adapters/handlebars.adapter';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Subscriber, SubscriberSchema } from 'src/subscribers/schemas/subscriber.schema';
 import { Job, JobSchema } from 'src/jobs/schemas/job.schema';

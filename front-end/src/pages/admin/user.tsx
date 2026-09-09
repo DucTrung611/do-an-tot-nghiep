@@ -19,7 +19,7 @@ const UserPage = () => {
     const [dataInit, setDataInit] = useState<IUser | null>(null);
     const [openViewDetail, setOpenViewDetail] = useState<boolean>(false);
 
-    const tableRef = useRef<ActionType>();
+    const tableRef = useRef<ActionType>(undefined);
 
     const isFetching = useAppSelector(state => state.user.isFetching);
     const meta = useAppSelector(state => state.user.meta);
@@ -60,7 +60,7 @@ const UserPage = () => {
                     </a>
                 )
             },
-            hideInSearch: true,
+            search: false,
         },
         {
             title: 'Name',
@@ -83,7 +83,7 @@ const UserPage = () => {
                     <>{dayjs(record.createdAt).format('DD-MM-YYYY HH:mm:ss')}</>
                 )
             },
-            hideInSearch: true,
+            search: false,
         },
         {
             title: 'UpdatedAt',
@@ -95,12 +95,12 @@ const UserPage = () => {
                     <>{dayjs(record.updatedAt).format('DD-MM-YYYY HH:mm:ss')}</>
                 )
             },
-            hideInSearch: true,
+            search: false,
         },
         {
 
             title: 'Actions',
-            hideInSearch: true,
+            search: false,
             width: 50,
             render: (_value, entity, _index, _action) => (
                 <Space>

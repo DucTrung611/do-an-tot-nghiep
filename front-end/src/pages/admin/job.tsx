@@ -14,7 +14,7 @@ import Access from "@/components/share/access";
 import { ALL_PERMISSIONS } from "@/config/permissions";
 
 const JobPage = () => {
-    const tableRef = useRef<ActionType>();
+    const tableRef = useRef<ActionType>(undefined);
 
     const isFetching = useAppSelector(state => state.job.isFetching);
     const meta = useAppSelector(state => state.job.meta);
@@ -53,7 +53,7 @@ const JobPage = () => {
                         {(index + 1) + (meta.current - 1) * (meta.pageSize)}
                     </>)
             },
-            hideInSearch: true,
+            search: false,
         },
         {
             title: 'Tên Job',
@@ -72,21 +72,23 @@ const JobPage = () => {
         {
             title: 'Level',
             dataIndex: 'level',
-            renderFormItem: (item, props, form) => (
-                <ProFormSelect
-                    showSearch
-                    mode="multiple"
-                    allowClear
-                    valueEnum={{
-                        INTERN: 'INTERN',
-                        FRESHER: 'FRESHER',
-                        JUNIOR: 'JUNIOR',
-                        MIDDLE: 'MIDDLE',
-                        SENIOR: 'SENIOR',
-                    }}
-                    placeholder="Chọn level"
-                />
-            ),
+            ...({
+                renderFormItem: (item: any, props: any, form: any) => (
+                    <ProFormSelect
+                        showSearch
+                        mode="multiple"
+                        allowClear
+                        valueEnum={{
+                            INTERN: 'INTERN',
+                            FRESHER: 'FRESHER',
+                            JUNIOR: 'JUNIOR',
+                            MIDDLE: 'MIDDLE',
+                            SENIOR: 'SENIOR',
+                        }}
+                        placeholder="Chọn level"
+                    />
+                ),
+            } as any),
         },
         {
             title: 'Trạng thái',
@@ -98,7 +100,7 @@ const JobPage = () => {
                     </Tag>
                 </>
             },
-            hideInSearch: true,
+            search: false,
         },
 
         {
@@ -111,7 +113,7 @@ const JobPage = () => {
                     <>{dayjs(record.createdAt).format('DD-MM-YYYY HH:mm:ss')}</>
                 )
             },
-            hideInSearch: true,
+            search: false,
         },
         {
             title: 'UpdatedAt',
@@ -123,12 +125,12 @@ const JobPage = () => {
                     <>{dayjs(record.updatedAt).format('DD-MM-YYYY HH:mm:ss')}</>
                 )
             },
-            hideInSearch: true,
+            search: false,
         },
         {
 
             title: 'Actions',
-            hideInSearch: true,
+            search: false,
             width: 50,
             render: (_value, entity, _index, _action) => (
                 <Space>
