@@ -270,13 +270,15 @@ const ResumePage = () => {
                     }}
                 />
             </Access>
-            <ViewDetailResume
-                open={openViewDetail}
-                onClose={setOpenViewDetail}
-                dataInit={dataInit}
-                setDataInit={setDataInit}
-                reloadTable={reloadTable}
-            />
+            {openViewDetail && (
+                <ViewDetailResume
+                    open={openViewDetail}
+                    onClose={setOpenViewDetail}
+                    dataInit={dataInit}
+                    setDataInit={setDataInit}
+                    reloadTable={reloadTable}
+                />
+            )}
         </div>
     );
 };

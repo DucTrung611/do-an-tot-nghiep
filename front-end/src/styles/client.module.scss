@@ -156,6 +156,7 @@
                 img {
                     width: 50px;
                     height: 50px;
+                    object-fit: contain;
                 }
             }
 
@@ -199,6 +200,16 @@
             height: 200px;
             width: 200px;
             margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
         }
     }
 
@@ -303,5 +314,11 @@
         justify-content: center;
         width: 100%;
         align-items: center;
+
+        img {
+            max-width: 180px;
+            max-height: 180px;
+            object-fit: contain;
+        }
     }
 }

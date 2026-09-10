@@ -573,7 +573,7 @@ export const INIT_COMPANIES = [
         name: "Tập đoàn Vingroup",
         address: "Số 7, Đường Bằng Lăng 1, Vinhomes Riverside, Long Biên, Hà Nội",
         description: "Vingroup là tập đoàn kinh tế đa ngành hàng đầu Việt Nam, hoạt động trong các lĩnh vực công nghệ, công nghiệp, bất động sản và bán lẻ.",
-        logo: "Vingroup_logo.svg-1772853813731.png",
+        logo: "vingroup-real.svg",
     },
 ];
 

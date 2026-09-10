@@ -2,7 +2,7 @@ import { CheckSquareOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/
 import { FooterToolbar, ModalForm, ProCard, ProFormText, ProFormTextArea } from "@ant-design/pro-components";
 import { Col, ConfigProvider, Form, Modal, Row, Upload, message, notification } from "antd";
 import 'styles/reset.scss';
-import { isMobile } from 'react-device-detect';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { useEffect, useState } from "react";
@@ -31,6 +31,7 @@ interface ICompanyLogo {
 
 const ModalCompany = (props: IProps) => {
     const { openModal, setOpenModal, reloadTable, dataInit, setDataInit } = props;
+    const isMobile = useIsMobile();
 
     //modal animation
     const [animation, setAnimation] = useState<string>('open');

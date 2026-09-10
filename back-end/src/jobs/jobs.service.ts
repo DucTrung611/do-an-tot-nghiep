@@ -46,10 +46,29 @@ export class JobsService {
 
     const isSuperAdmin = user?.role?.name === ADMIN_ROLE;
     const isNormalUser = user?.role?.name === USER_ROLE;
+    const isCompanyUser = !!user && !isSuperAdmin && !isNormalUser;
 
-    // Public/client browsing should see all jobs; only non-admin company accounts are scoped.
-    if (user && !isSuperAdmin && !isNormalUser) {
+    // Company accounts manage their own jobs (all statuses); everyone else is scoped to their own company.
+    if (isCompanyUser) {
       filter["company._id"] = user?.company?._id ?? null;
+    }
+
+    // `company` is stored as a plain Object, so `_id` ends up persisted as either a string (jobs created
+    // through the REST API, where JSON has no ObjectId type) or a real ObjectId (jobs seeded directly via
+    // Mongoose). Match both representations, otherwise a filter cast to only one type silently excludes jobs
+    // stored with the other.
+    if (filter["company._id"]) {
+      const idStr = String(filter["company._id"]);
+      const candidates: (string | mongoose.Types.ObjectId)[] = [idStr];
+      if (mongoose.Types.ObjectId.isValid(idStr)) {
+        candidates.push(new mongoose.Types.ObjectId(idStr));
+      }
+      filter["company._id"] = { $in: candidates };
+    }
+
+    // Only admins and the owning company can see inactive jobs; public/candidate browsing only sees active ones.
+    if (!isSuperAdmin && !isCompanyUser && filter.isActive === undefined) {
+      filter.isActive = true;
     }
 
     let offset = (+currentPage - 1) * (+limit);
@@ -77,11 +96,22 @@ export class JobsService {
     }
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, user?: IUser) {
     if (!mongoose.Types.ObjectId.isValid(id))
       return `not found job`;
 
-    return await this.jobModel.findById(id);
+    const job = await this.jobModel.findById(id);
+    if (!job) return `not found job`;
+
+    const isSuperAdmin = user?.role?.name === ADMIN_ROLE;
+    const isOwner = !!user?.company?._id &&
+      job.company?._id?.toString() === user.company._id.toString();
+
+    if (job.isActive === false && !isSuperAdmin && !isOwner) {
+      return `not found job`;
+    }
+
+    return job;
   }
 
   async update(_id: string, updateJobDto: UpdateJobDto, user: IUser) {

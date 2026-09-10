@@ -51,7 +51,7 @@ const ViewDetailResume = (props: IProps) => {
                 placement="right"
                 onClose={() => { onClose(false); setDataInit(null) }}
                 open={open}
-                width={"40vw"}
+                size={"40vw"}
                 maskClosable={false}
                 destroyOnHidden
                 extra={
@@ -65,25 +65,22 @@ const ViewDetailResume = (props: IProps) => {
                 <Descriptions title="" bordered column={2} layout="vertical">
                     <Descriptions.Item label="Email">{dataInit?.email}</Descriptions.Item>
                     <Descriptions.Item label="Trạng thái">
-                        <Form
-                            form={form}
-                        >
-                            <Form.Item name={"status"}>
-                                <Select
-                                    // placeholder="Select a option and change input text above"
-                                    // onChange={onGenderChange}
-                                    // allowClear
-                                    style={{ width: "100%" }}
-                                    defaultValue={dataInit?.status}
-                                >
-                                    <Option value="PENDING">PENDING</Option>
-                                    <Option value="REVIEWING">REVIEWING</Option>
-                                    <Option value="APPROVED">APPROVED</Option>
-                                    <Option value="REJECTED">REJECTED</Option>
-                                </Select>
-                            </Form.Item>
-                        </Form>
-
+                        {dataInit && (
+                            <Form
+                                form={form}
+                            >
+                                <Form.Item name={"status"}>
+                                    <Select
+                                        style={{ width: "100%" }}
+                                    >
+                                        <Option value="PENDING">PENDING</Option>
+                                        <Option value="REVIEWING">REVIEWING</Option>
+                                        <Option value="APPROVED">APPROVED</Option>
+                                        <Option value="REJECTED">REJECTED</Option>
+                                    </Select>
+                                </Form.Item>
+                            </Form>
+                        )}
                     </Descriptions.Item>
                     <Descriptions.Item label="Tên Job">
                         {dataInit?.jobId?.name}

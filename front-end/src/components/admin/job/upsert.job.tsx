@@ -147,10 +147,10 @@ const ViewUpsertJob = (props: any) => {
                     separator=">"
                     items={[
                         {
-                            title: <Link to="/admin/job">Manage Job</Link>,
+                            title: <Link to="/admin/job">Quản Lý Job</Link>,
                         },
                         {
-                            title: 'Upsert Job',
+                            title: 'Thêm/Sửa Job',
                         },
                     ]}
                 />
@@ -191,7 +191,7 @@ const ViewUpsertJob = (props: any) => {
                                     name="skills"
                                     label="Kỹ năng yêu cầu"
                                     options={SKILLS_LIST}
-                                    placeholder="Please select a skill"
+                                    placeholder="Chọn kỹ năng"
                                     rules={[{ required: true, message: 'Vui lòng chọn kỹ năng!' }]}
                                     allowClear
                                     mode="multiple"
@@ -206,7 +206,7 @@ const ViewUpsertJob = (props: any) => {
                                     name="location"
                                     label="Địa điểm"
                                     options={LOCATION_LIST.filter(item => item.value !== 'ALL')}
-                                    placeholder="Please select a location"
+                                    placeholder="Chọn địa điểm"
                                     rules={[{ required: true, message: 'Vui lòng chọn địa điểm!' }]}
                                 />
                             </Col>
@@ -242,7 +242,7 @@ const ViewUpsertJob = (props: any) => {
                                         MIDDLE: 'MIDDLE',
                                         SENIOR: 'SENIOR',
                                     }}
-                                    placeholder="Please select a level"
+                                    placeholder="Chọn trình độ"
                                     rules={[{ required: true, message: 'Vui lòng chọn level!' }]}
                                 />
                             </Col>

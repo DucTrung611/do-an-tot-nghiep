@@ -3,7 +3,7 @@ import { convertSlug } from "@/config/utils";
 import { ICompany } from "@/types/backend";
 import { Card, Col, Divider, Empty, Pagination, Row, Spin } from "antd";
 import { useState, useEffect } from "react";
-import { isMobile } from "react-device-detect";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "styles/client.module.scss";
 
@@ -14,6 +14,7 @@ interface IProps {
 
 const CompanyCard = (props: IProps) => {
     const { showPagination = false, filterQuery = "" } = props;
+    const isMobile = useIsMobile();
 
     const [displayCompany, setDisplayCompany] = useState<ICompany[] | null>(
         null,
@@ -106,7 +107,7 @@ const CompanyCard = (props: IProps) => {
                                                 }
                                             >
                                                 <img
-                                                    alt="example"
+                                                    alt={item?.name}
                                                     src={`${import.meta.env.VITE_BACKEND_URL}/images/company/${item?.logo}`}
                                                 />
                                             </div>

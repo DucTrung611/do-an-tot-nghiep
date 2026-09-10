@@ -27,8 +27,8 @@ describe('ViewUpsertJob', () => {
     it('renders the breadcrumb and the create submit label when there is no job id in the url', () => {
         renderWithProviders(<ViewUpsertJob />, { route: '/admin/job/upsert' });
 
-        expect(screen.getByText('Manage Job')).toBeInTheDocument();
-        expect(screen.getByText('Upsert Job')).toBeInTheDocument();
+        expect(screen.getByText('Quản Lý Job')).toBeInTheDocument();
+        expect(screen.getByText('Thêm/Sửa Job')).toBeInTheDocument();
         expect(screen.getByText('Tạo mới Job')).toBeInTheDocument();
     }, 15000);
 

@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
+import mongoose from 'mongoose';
 import { JobsService } from './jobs.service';
 import { Job } from './schemas/job.schema';
 import { IUser } from 'src/users/users.interface';
@@ -93,7 +94,20 @@ describe('JobsService', () => {
 
             await service.findAll(1, 10, '', hrUser);
 
-            expect(jobModel.find).toHaveBeenCalledWith(expect.objectContaining({ 'company._id': 'company1' }));
+            expect(jobModel.find).toHaveBeenCalledWith(expect.objectContaining({ 'company._id': { $in: ['company1'] } }));
+        });
+
+        it('matches company._id stored as either a string or an ObjectId', async () => {
+            jobModel.find.mockReturnValue(makeFindResult([]));
+            const validObjectId = '507f1f77bcf86cd799439099';
+            const hrUser = { ...actingUser, role: { name: 'HR' }, company: { _id: validObjectId } } as unknown as IUser;
+
+            await service.findAll(1, 10, '', hrUser);
+
+            const calledFilter = jobModel.find.mock.calls[0][0];
+            expect(calledFilter['company._id'].$in).toEqual(
+                expect.arrayContaining([validObjectId, expect.any(mongoose.Types.ObjectId)]),
+            );
         });
     });
 

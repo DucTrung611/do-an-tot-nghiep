@@ -58,7 +58,7 @@ describe('LayoutAdmin', () => {
         renderWithProviders(<LayoutAdmin />, { preloadedState: accountState([]), route: '/admin' });
 
         const header = document.querySelector('.admin-header') as HTMLElement;
-        expect(header.textContent).toContain('Welcome');
+        expect(header.textContent).toContain('Xin chào');
         expect(header.textContent).toContain('Admin');
     });
 
@@ -76,7 +76,7 @@ describe('LayoutAdmin', () => {
             route: '/admin',
         });
 
-        await userEvent.click(screen.getByText(/Welcome/));
+        await userEvent.click(screen.getByText(/Xin chào/));
         await userEvent.click(await screen.findByText('Đăng xuất'));
 
         await vi.waitFor(() => {

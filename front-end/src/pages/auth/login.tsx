@@ -87,7 +87,7 @@ const LoginPage = () => {
                                     Đăng nhập
                                 </Button>
                             </Form.Item>
-                            <Divider>Or</Divider>
+                            <Divider>Hoặc</Divider>
                             <p className="text text-normal">Chưa có tài khoản ?
                                 <span>
                                     <Link to='/register' > Đăng Ký </Link>

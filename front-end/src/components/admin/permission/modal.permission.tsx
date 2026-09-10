@@ -1,6 +1,6 @@
 import { ModalForm, ProFormSelect, ProFormText } from "@ant-design/pro-components";
 import { Col, Form, Row, message, notification } from "antd";
-import { isMobile } from 'react-device-detect';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { callCreatePermission, callUpdatePermission } from "@/config/api";
 import { IPermission } from "@/types/backend";
 import { ALL_MODULES } from "@/config/permissions";
@@ -17,6 +17,7 @@ interface IProps {
 
 const ModalPermission = (props: IProps) => {
     const { openModal, setOpenModal, reloadTable, dataInit, setDataInit } = props;
+    const isMobile = useIsMobile();
     const [form] = Form.useForm();
 
 
@@ -120,7 +121,7 @@ const ModalPermission = (props: IProps) => {
                                 PATCH: 'PATCH',
                                 DELETE: 'DELETE',
                             }}
-                            placeholder="Please select a method"
+                            placeholder="Chọn method"
                             rules={[{ required: true, message: 'Vui lòng chọn method!' }]}
                         />
                     </Col>
@@ -129,7 +130,7 @@ const ModalPermission = (props: IProps) => {
                             name="module"
                             label="Thuộc Module"
                             valueEnum={ALL_MODULES}
-                            placeholder="Please select a module"
+                            placeholder="Chọn module"
                             rules={[{ required: true, message: 'Vui lòng chọn module!' }]}
                         />
                     </Col>

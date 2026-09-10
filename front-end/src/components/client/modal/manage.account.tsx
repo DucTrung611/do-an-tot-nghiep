@@ -11,7 +11,7 @@ import {
     message,
     notification,
 } from "antd";
-import { isMobile } from "react-device-detect";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import type { TabsProps } from "antd";
 import { IResume } from "@/types/backend";
 import { useState, useEffect } from "react";
@@ -405,6 +405,7 @@ const JobByEmail = (props: any) => {
 
 const ManageAccount = (props: IProps) => {
     const { open, onClose } = props;
+    const isMobile = useIsMobile();
 
     const onChange = (key: string) => {
         // console.log(key);

@@ -42,7 +42,7 @@ describe('Header', () => {
             preloadedState: accountState({ isAuthenticated: true, name: 'Alice' }),
         });
 
-        expect(screen.getByText('Welcome Alice')).toBeInTheDocument();
+        expect(screen.getByText('Xin chào Alice')).toBeInTheDocument();
         expect(screen.queryByText('Đăng Nhập')).not.toBeInTheDocument();
     });
 
@@ -58,7 +58,7 @@ describe('Header', () => {
         });
 
         const user = userEvent.setup();
-        await user.click(screen.getByText('Welcome Alice'));
+        await user.click(screen.getByText('Xin chào Alice'));
         const logoutItem = await screen.findByText('Đăng xuất');
         await user.click(logoutItem);
 

@@ -1,6 +1,6 @@
 import { FooterToolbar, ModalForm, ProCard, ProFormSwitch, ProFormText, ProFormTextArea } from "@ant-design/pro-components";
 import { Col, Form, Row, message, notification } from "antd";
-import { isMobile } from 'react-device-detect';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { callCreateRole, callFetchPermission, callUpdateRole } from "@/config/api";
 import { IPermission } from "@/types/backend";
 import { CheckSquareOutlined } from "@ant-design/icons";
@@ -20,6 +20,7 @@ interface IProps {
 
 const ModalRole = (props: IProps) => {
     const { openModal, setOpenModal, reloadTable } = props;
+    const isMobile = useIsMobile();
     const singleRole = useAppSelector(state => state.role.singleRole);
     const dispatch = useAppDispatch();
 

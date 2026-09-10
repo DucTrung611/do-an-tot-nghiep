@@ -36,7 +36,7 @@ export class SubscribersService {
 
     return {
       _id: newSubs?._id,
-      createdBy: newSubs?.createdAt
+      createdAt: newSubs?.createdAt
     };
   }
 

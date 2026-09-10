@@ -11,7 +11,7 @@ import {
 import { Avatar, Drawer, Dropdown, MenuProps, Space, message } from "antd";
 import { Menu, ConfigProvider } from "antd";
 import styles from "@/styles/client.module.scss";
-import { isMobile } from "react-device-detect";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { FaReact } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -23,6 +23,7 @@ import ManageAccount from "./modal/manage.account";
 const Header = (props: any) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+    const isMobile = useIsMobile();
 
     const isAuthenticated = useAppSelector(
         (state) => state.account.isAuthenticated,
@@ -140,6 +141,7 @@ const Header = (props: any) => {
                                         selectedKeys={[current]}
                                         mode="horizontal"
                                         items={items}
+                                        style={{ flex: "1 1 auto", minWidth: 0 }}
                                     />
                                 </ConfigProvider>
                                 <div className={styles["extra"]}>
@@ -154,7 +156,7 @@ const Header = (props: any) => {
                                                 style={{ cursor: "pointer" }}
                                             >
                                                 <span>
-                                                    Welcome {user?.name}
+                                                    Xin chào {user?.name}
                                                 </span>
                                                 <Avatar>
                                                     {" "}

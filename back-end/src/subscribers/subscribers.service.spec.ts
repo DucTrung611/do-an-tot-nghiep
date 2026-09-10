@@ -63,7 +63,7 @@ describe('SubscribersService', () => {
             expect(subscriberModel.create).toHaveBeenCalledWith(
                 expect.objectContaining({ email: 'a@b.com', createdBy: { _id: actingUser._id, email: actingUser.email } }),
             );
-            expect(result).toEqual({ _id: 'sub1', createdBy: '2026-01-01' });
+            expect(result).toEqual({ _id: 'sub1', createdAt: '2026-01-01' });
         });
     });
 

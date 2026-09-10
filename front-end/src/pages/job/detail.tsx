@@ -73,7 +73,7 @@ const ClientJobDetailPage = (props: any) => {
                                     <EnvironmentOutlined style={{ color: '#58aaab' }} />&nbsp;{getLocationName(jobDetail.location)}
                                 </div>
                                 <div>
-                                    <HistoryOutlined /> {dayjs(jobDetail.updatedAt).fromNow()}
+                                    <HistoryOutlined /> {dayjs(jobDetail.updatedAt).locale("vi").fromNow()}
                                 </div>
                                 <Divider />
                                 {parse(jobDetail.description)}
@@ -83,7 +83,7 @@ const ClientJobDetailPage = (props: any) => {
                                 <div className={styles["company"]}>
                                     <div>
                                         <img
-                                            alt="example"
+                                            alt={jobDetail.company?.name}
                                             src={`${import.meta.env.VITE_BACKEND_URL}/images/company/${jobDetail.company?.logo}`}
                                         />
                                     </div>

@@ -18,10 +18,10 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { callLogout } from "config/api";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { isMobile } from "react-device-detect";
 import type { MenuProps } from "antd";
 import { setLogoutAction } from "@/redux/slice/accountSlide";
 import { ALL_PERMISSIONS } from "@/config/permissions";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const { Content, Footer, Sider } = Layout;
 
@@ -31,6 +31,7 @@ const LayoutAdmin = () => {
     const [collapsed, setCollapsed] = useState(false);
     const [activeMenu, setActiveMenu] = useState("");
     const user = useAppSelector((state) => state.account.user);
+    const isMobile = useIsMobile();
 
     const permissions = useAppSelector(
         (state) => state.account.user.permissions,
@@ -263,7 +264,7 @@ const LayoutAdmin = () => {
                                 trigger={["click"]}
                             >
                                 <Space style={{ cursor: "pointer" }}>
-                                    Welcome {user?.name}
+                                    Xin chào {user?.name}
                                     <Avatar>
                                         {" "}
                                         {user?.name

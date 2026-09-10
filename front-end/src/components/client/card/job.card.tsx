@@ -4,7 +4,7 @@ import { IJob } from "@/types/backend";
 import { EnvironmentOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import { Card, Col, Empty, Pagination, Row, Spin } from "antd";
 import { useState, useEffect } from "react";
-import { isMobile } from "react-device-detect";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "styles/client.module.scss";
 import dayjs from "dayjs";
@@ -18,6 +18,7 @@ interface IProps {
 
 const JobCard = (props: IProps) => {
     const { showPagination = false, filterQuery = "" } = props;
+    const isMobile = useIsMobile();
 
     const [displayJob, setDisplayJob] = useState<IJob[] | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -101,9 +102,17 @@ const JobCard = (props: IProps) => {
                                         size="small"
                                         title={null}
                                         hoverable
+                                        role="link"
+                                        tabIndex={0}
                                         onClick={() =>
                                             handleViewDetailJob(item)
                                         }
+                                        onKeyDown={(e) => {
+                                            if (e.key === "Enter" || e.key === " ") {
+                                                e.preventDefault();
+                                                handleViewDetailJob(item);
+                                            }
+                                        }}
                                     >
                                         <div
                                             className={
@@ -116,7 +125,7 @@ const JobCard = (props: IProps) => {
                                                 }
                                             >
                                                 <img
-                                                    alt="example"
+                                                    alt={item?.company?.name}
                                                     src={`${import.meta.env.VITE_BACKEND_URL}/images/company/${item?.company?.logo}`}
                                                 />
                                             </div>
@@ -169,7 +178,9 @@ const JobCard = (props: IProps) => {
                                                 >
                                                     {dayjs(
                                                         item.updatedAt,
-                                                    ).fromNow()}
+                                                    )
+                                                        .locale("vi")
+                                                        .fromNow()}
                                                 </div>
                                             </div>
                                         </div>
