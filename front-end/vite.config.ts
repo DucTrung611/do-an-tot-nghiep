@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig, loadEnv, type PluginOption } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import path from 'path';
@@ -30,6 +31,12 @@ export default defineConfig(({ command, mode }) => {
         config: `${path.resolve(import.meta.dirname, "./src/config/")}`,
         pages: `${path.resolve(import.meta.dirname, "./src/pages/")}`,
       },
+    },
+    test: {
+      environment: 'jsdom',
+      globals: true,
+      setupFiles: ['./src/test/setup.ts'],
+      css: false,
     },
   }
 })
