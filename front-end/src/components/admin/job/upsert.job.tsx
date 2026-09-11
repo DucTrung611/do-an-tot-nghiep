@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { DebounceSelect } from "../user/debouce.select";
 import { FooterToolbar, ProForm, ProFormDatePicker, ProFormDigit, ProFormSelect, ProFormSwitch, ProFormText } from "@ant-design/pro-components";
 import styles from 'styles/admin.module.scss';
-import { LOCATION_LIST, SKILLS_LIST } from "@/config/utils";
+import { JOB_TYPE_LIST, LOCATION_LIST, SKILLS_LIST } from "@/config/utils";
 import { ICompanySelect } from "../user/modal.user";
 import { useState, useEffect } from 'react';
 import { callCreateJob, callFetchCompany, callFetchJobById, callUpdateJob } from "@/config/api";
@@ -88,6 +88,8 @@ const ViewUpsertJob = (props: any) => {
                 salary: values.salary,
                 quantity: values.quantity,
                 level: values.level,
+                jobType: values.jobType,
+                experienceYears: values.experienceYears,
                 description: value,
                 startDate: /[0-9]{2}[/][0-9]{2}[/][0-9]{4}$/.test(values.startDate) ? dayjs(values.startDate, 'DD/MM/YYYY').toDate() : values.startDate,
                 endDate: /[0-9]{2}[/][0-9]{2}[/][0-9]{4}$/.test(values.endDate) ? dayjs(values.endDate, 'DD/MM/YYYY').toDate() : values.endDate,
@@ -119,6 +121,8 @@ const ViewUpsertJob = (props: any) => {
                 salary: values.salary,
                 quantity: values.quantity,
                 level: values.level,
+                jobType: values.jobType,
+                experienceYears: values.experienceYears,
                 description: value,
                 startDate: dayjs(values.startDate, 'DD/MM/YYYY').toDate(),
                 endDate: dayjs(values.endDate, 'DD/MM/YYYY').toDate(),
@@ -244,6 +248,22 @@ const ViewUpsertJob = (props: any) => {
                                     }}
                                     placeholder="Chọn trình độ"
                                     rules={[{ required: true, message: 'Vui lòng chọn level!' }]}
+                                />
+                            </Col>
+                            <Col span={24} md={6}>
+                                <ProFormSelect
+                                    name="jobType"
+                                    label="Hình thức làm việc"
+                                    options={JOB_TYPE_LIST}
+                                    placeholder="Chọn hình thức làm việc"
+                                />
+                            </Col>
+                            <Col span={24} md={6}>
+                                <ProFormDigit
+                                    label="Số năm kinh nghiệm"
+                                    name="experienceYears"
+                                    placeholder="Nhập số năm kinh nghiệm tối thiểu"
+                                    fieldProps={{ min: 0 }}
                                 />
                             </Col>
 

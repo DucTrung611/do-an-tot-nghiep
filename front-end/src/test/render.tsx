@@ -10,6 +10,8 @@ import jobReducer from '@/redux/slice/jobSlide';
 import resumeReducer from '@/redux/slice/resumeSlide';
 import permissionReducer from '@/redux/slice/permissionSlide';
 import roleReducer from '@/redux/slice/roleSlide';
+import savedJobReducer from '@/redux/slice/savedJobSlide';
+import notificationReducer from '@/redux/slice/notificationSlide';
 import type { RootState } from '@/redux/store';
 
 const rootReducer = {
@@ -20,6 +22,8 @@ const rootReducer = {
     resume: resumeReducer,
     permission: permissionReducer,
     role: roleReducer,
+    savedJob: savedJobReducer,
+    notification: notificationReducer,
 };
 
 export const makeTestStore = (preloadedState?: PreloadedState<RootState>) =>

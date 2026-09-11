@@ -42,6 +42,12 @@ export class Job {
     @Prop()
     isActive: boolean;
 
+    @Prop()
+    jobType: string; // FULL_TIME | PART_TIME | CONTRACT | INTERNSHIP | REMOTE
+
+    @Prop({ default: 0 })
+    experienceYears: number; // số năm kinh nghiệm tối thiểu yêu cầu
+
     @Prop({ type: Object })
     createdBy: {
         _id: mongoose.Schema.Types.ObjectId;
@@ -74,4 +80,19 @@ export class Job {
 }
 
 export const JobSchema = SchemaFactory.createForClass(Job);
+
+// Index đầu tiên của codebase. Chỉ được phép có 1 text index / collection,
+// và Mongo không có analyzer tiếng Việt nên phải tắt stemming (default_language: 'none')
+// để tránh làm hỏng dấu/ký tự khi tách từ.
+JobSchema.index(
+    { name: 'text', skills: 'text', description: 'text' },
+    { name: 'job_text_idx', weights: { name: 5, skills: 3, description: 1 }, default_language: 'none' },
+);
+JobSchema.index({ isActive: 1, updatedAt: -1 });
+JobSchema.index({ skills: 1 });
+JobSchema.index({ location: 1 });
+JobSchema.index({ salary: 1 });
+JobSchema.index({ jobType: 1 });
+JobSchema.index({ 'company._id': 1 });
+JobSchema.index({ createdAt: -1 });
 

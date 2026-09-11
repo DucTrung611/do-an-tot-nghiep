@@ -68,3 +68,8 @@ export class Resume {
 }
 
 export const ResumeSchema = SchemaFactory.createForClass(Resume);
+
+ResumeSchema.index({ userId: 1, createdAt: -1 });
+ResumeSchema.index({ companyId: 1, status: 1 });
+ResumeSchema.index({ jobId: 1 });
+ResumeSchema.index({ createdAt: -1 });

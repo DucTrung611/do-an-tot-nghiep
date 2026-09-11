@@ -3,6 +3,8 @@ import {
     CodeOutlined,
     ContactsOutlined,
     DashOutlined,
+    FileTextOutlined,
+    HeartOutlined,
     LogoutOutlined,
     MenuFoldOutlined,
     RiseOutlined,
@@ -19,7 +21,9 @@ import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { callLogout } from "@/config/api";
 import { setLogoutAction } from "@/redux/slice/accountSlide";
+import { resetNotification } from "@/redux/slice/notificationSlide";
 import ManageAccount from "./modal/manage.account";
+import NotificationBell from "./notification.bell";
 
 const Header = (props: any) => {
     const navigate = useNavigate();
@@ -72,6 +76,7 @@ const Header = (props: any) => {
         const res = await callLogout();
         if (res && res.data) {
             dispatch(setLogoutAction({}));
+            dispatch(resetNotification());
             message.success("Đăng xuất thành công");
             navigate("/");
         }
@@ -82,6 +87,16 @@ const Header = (props: any) => {
         user?.role?._id === "69a4efcce682bebdc6a45635";
 
     const itemsDropdown = [
+        {
+            label: <Link to={"/saved-jobs"}>Việc làm đã lưu</Link>,
+            key: "saved-jobs",
+            icon: <HeartOutlined />,
+        },
+        {
+            label: <Link to={"/applied-jobs"}>Việc làm đã ứng tuyển</Link>,
+            key: "applied-jobs",
+            icon: <FileTextOutlined />,
+        },
         {
             label: (
                 <label
@@ -154,24 +169,27 @@ const Header = (props: any) => {
                                     {isAuthenticated === false ? (
                                         <Link to={"/login"}>Đăng Nhập</Link>
                                     ) : (
-                                        <Dropdown
-                                            menu={{ items: itemsDropdown }}
-                                            trigger={["click"]}
-                                        >
-                                            <Space
-                                                style={{ cursor: "pointer" }}
+                                        <Space size={16} align="center">
+                                            <NotificationBell />
+                                            <Dropdown
+                                                menu={{ items: itemsDropdown }}
+                                                trigger={["click"]}
                                             >
-                                                <span>
-                                                    Xin chào {user?.name}
-                                                </span>
-                                                <Avatar>
-                                                    {" "}
-                                                    {user?.name
-                                                        ?.substring(0, 2)
-                                                        ?.toUpperCase()}{" "}
-                                                </Avatar>
-                                            </Space>
-                                        </Dropdown>
+                                                <Space
+                                                    style={{ cursor: "pointer" }}
+                                                >
+                                                    <span>
+                                                        Xin chào {user?.name}
+                                                    </span>
+                                                    <Avatar>
+                                                        {" "}
+                                                        {user?.name
+                                                            ?.substring(0, 2)
+                                                            ?.toUpperCase()}{" "}
+                                                    </Avatar>
+                                                </Space>
+                                            </Dropdown>
+                                        </Space>
                                     )}
                                 </div>
                             </div>
@@ -179,9 +197,12 @@ const Header = (props: any) => {
                     ) : (
                         <div className={styles["header-mobile"]}>
                             <span>Your APP</span>
-                            <MenuFoldOutlined
-                                onClick={() => setOpenMobileMenu(true)}
-                            />
+                            <Space size={16} align="center">
+                                {isAuthenticated && <NotificationBell />}
+                                <MenuFoldOutlined
+                                    onClick={() => setOpenMobileMenu(true)}
+                                />
+                            </Space>
                         </div>
                     )}
                 </div>

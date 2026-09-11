@@ -95,6 +95,8 @@ export interface IJob {
     startDate: Date;
     endDate: Date;
     isActive: boolean;
+    jobType?: string;
+    experienceYears?: number;
 
     createdBy?: string;
     isDeleted?: boolean;
@@ -126,6 +128,14 @@ export interface IResume {
     createdBy?: string;
     isDeleted?: boolean;
     deletedAt?: boolean | null;
+    createdAt?: string;
+    updatedAt?: string;
+}
+
+export interface ISavedJob {
+    _id?: string;
+    userId: string;
+    jobId: string | IJob;
     createdAt?: string;
     updatedAt?: string;
 }
@@ -225,5 +235,36 @@ export interface ICvAnalysis {
     isDeleted?: boolean;
     deletedAt?: boolean | null;
     createdAt?: string;
+    updatedAt?: string;
+}
+
+export interface IDashboardStats {
+    totals: {
+        users: number;
+        jobs: number;
+        companies: number;
+        resumes: number;
+        activeJobs: number;
+        pendingResumes: number;
+    };
+    jobsByMonth: { month: string; count: number }[];
+    applicationsByMonth: { month: string; count: number }[];
+    resumesByStatus: { status: string; count: number }[];
+    topSkills: { skill: string; count: number }[];
+    jobsByLocation: { location: string; count: number }[];
+    topJobsByApplications: { jobId: string; jobName: string; companyName?: string; count: number }[];
+    salaryDistribution: { _id: number | string; count: number }[];
+}
+
+export interface INotification {
+    _id: string;
+    userId: string;
+    type: string;
+    title: string;
+    message: string;
+    link?: string;
+    isRead: boolean;
+    meta?: Record<string, any>;
+    createdAt: string;
     updatedAt?: string;
 }

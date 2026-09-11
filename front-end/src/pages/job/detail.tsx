@@ -6,10 +6,13 @@ import styles from 'styles/client.module.scss';
 import parse from 'html-react-parser';
 import { Col, Divider, Row, Skeleton, Tag } from "antd";
 import { DollarOutlined, EnvironmentOutlined, HistoryOutlined } from "@ant-design/icons";
-import { getLocationName } from "@/config/utils";
+import { getJobTypeName, getLocationName } from "@/config/utils";
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import ApplyModal from "@/components/client/modal/apply.modal";
+import SavedJobButton from "@/components/client/card/saved-job.button";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchSavedJobIds } from "@/redux/slice/savedJobSlide";
 dayjs.extend(relativeTime)
 
 
@@ -18,6 +21,8 @@ const ClientJobDetailPage = (props: any) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const dispatch = useAppDispatch();
+    const isAuthenticated = useAppSelector(state => state.account.isAuthenticated);
 
     let location = useLocation();
     let params = new URLSearchParams(location.search);
@@ -37,6 +42,12 @@ const ClientJobDetailPage = (props: any) => {
         init();
     }, [id]);
 
+    useEffect(() => {
+        if (isAuthenticated) {
+            dispatch(fetchSavedJobIds());
+        }
+    }, [isAuthenticated, dispatch]);
+
     return (
         <div className={`${styles["container"]} ${styles["detail-job-section"]}`}>
             {isLoading ?
@@ -49,11 +60,12 @@ const ClientJobDetailPage = (props: any) => {
                                 <div className={styles["header"]}>
                                     {jobDetail.name}
                                 </div>
-                                <div>
+                                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                                     <button
                                         onClick={() => setIsModalOpen(true)}
                                         className={styles["btn-apply"]}
                                     >Apply Now</button>
+                                    {jobDetail._id && <SavedJobButton jobId={jobDetail._id} stopPropagation={false} />}
                                 </div>
                                 <Divider />
                                 <div className={styles["skills"]}>
@@ -72,6 +84,12 @@ const ClientJobDetailPage = (props: any) => {
                                 <div className={styles["location"]}>
                                     <EnvironmentOutlined style={{ color: '#58aaab' }} />&nbsp;{getLocationName(jobDetail.location)}
                                 </div>
+                                {(jobDetail.jobType || jobDetail.experienceYears !== undefined) && (
+                                    <div>
+                                        {jobDetail.jobType && <Tag color="blue">{getJobTypeName(jobDetail.jobType)}</Tag>}
+                                        {!!jobDetail.experienceYears && <Tag color="purple">{jobDetail.experienceYears}+ năm kinh nghiệm</Tag>}
+                                    </div>
+                                )}
                                 <div>
                                     <HistoryOutlined /> {dayjs(jobDetail.updatedAt).locale("vi").fromNow()}
                                 </div>

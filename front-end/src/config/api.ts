@@ -1,4 +1,4 @@
-import { IBackendRes, ICompany, IAccount, IUser, IModelPaginate, IGetAccount, IJob, IResume, IPermission, IRole, ISubscribers, ICvAnalysis } from '@/types/backend';
+import { IBackendRes, ICompany, IAccount, IUser, IModelPaginate, IGetAccount, IJob, IResume, IPermission, IRole, ISubscribers, ICvAnalysis, ISavedJob, IDashboardStats, INotification } from '@/types/backend';
 import axios from 'config/axios-customize';
 
 /**
@@ -256,4 +256,55 @@ export const callFetchCvHistory = () => {
 
 export const callFetchCvAnalysisById = (id: string) => {
     return axios.get<IBackendRes<ICvAnalysis>>(`/api/v1/cv-matching/${id}`);
+}
+
+
+/**
+ * 
+Module Saved Jobs (Việc làm đã lưu)
+ */
+export const callSaveJob = (jobId: string) => {
+    return axios.post<IBackendRes<ISavedJob>>('/api/v1/saved-jobs', { jobId })
+}
+
+export const callUnsaveJob = (jobId: string) => {
+    return axios.delete<IBackendRes<{ deleted: number }>>(`/api/v1/saved-jobs/${jobId}`);
+}
+
+export const callFetchSavedJob = (query: string) => {
+    return axios.get<IBackendRes<IModelPaginate<ISavedJob>>>(`/api/v1/saved-jobs?${query}`);
+}
+
+export const callFetchSavedJobIds = () => {
+    return axios.get<IBackendRes<string[]>>(`/api/v1/saved-jobs/ids`);
+}
+
+
+/**
+ * 
+Module Stats (Thống kê dashboard admin)
+ */
+export const callFetchDashboardStats = (months: number = 12) => {
+    return axios.get<IBackendRes<IDashboardStats>>(`/api/v1/stats/overview?months=${months}`);
+}
+
+
+/**
+ * 
+Module Notifications
+ */
+export const callFetchNotification = (query: string) => {
+    return axios.get<IBackendRes<IModelPaginate<INotification>>>(`/api/v1/notifications?${query}`);
+}
+
+export const callFetchUnreadCount = () => {
+    return axios.get<IBackendRes<number>>(`/api/v1/notifications/unread-count`);
+}
+
+export const callMarkNotificationRead = (id: string) => {
+    return axios.patch<IBackendRes<any>>(`/api/v1/notifications/${id}/read`);
+}
+
+export const callMarkAllNotificationsRead = () => {
+    return axios.patch<IBackendRes<any>>(`/api/v1/notifications/read-all`);
 }

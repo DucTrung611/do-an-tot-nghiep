@@ -1,5 +1,5 @@
 import { callFetchJob } from "@/config/api";
-import { LOCATION_LIST, convertSlug, getLocationName } from "@/config/utils";
+import { LOCATION_LIST, convertSlug, getJobTypeName, getLocationName } from "@/config/utils";
 import { IJob } from "@/types/backend";
 import { EnvironmentOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import { Card, Col, Empty, Pagination, Row, Spin } from "antd";
@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "styles/client.module.scss";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import SavedJobButton from "./saved-job.button";
 dayjs.extend(relativeTime);
 
 interface IProps {
@@ -113,6 +114,7 @@ const JobCard = (props: IProps) => {
                                                 handleViewDetailJob(item);
                                             }
                                         }}
+                                        extra={item._id ? <SavedJobButton jobId={item._id} size="small" /> : null}
                                     >
                                         <div
                                             className={
@@ -171,6 +173,13 @@ const JobCard = (props: IProps) => {
                                                     )}{" "}
                                                     đ
                                                 </div>
+                                                {(item.jobType || item.experienceYears) && (
+                                                    <div style={{ color: "#666", fontSize: 13 }}>
+                                                        {item.jobType ? getJobTypeName(item.jobType) : ""}
+                                                        {item.jobType && item.experienceYears ? " · " : ""}
+                                                        {item.experienceYears ? `${item.experienceYears}+ năm kinh nghiệm` : ""}
+                                                    </div>
+                                                )}
                                                 <div
                                                     className={
                                                         styles["job-updatedAt"]

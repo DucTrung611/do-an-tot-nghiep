@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { http, HttpResponse } from 'msw';
 import userEvent from '@testing-library/user-event';
 import { screen, waitFor } from '@testing-library/react';
@@ -31,6 +31,16 @@ function accountState(overrides: { isAuthenticated: boolean; roleName?: string; 
 }
 
 describe('Header', () => {
+    // NotificationBell mounts for every authenticated render and fetches the
+    // unread count on mount — every authenticated test case needs this handler.
+    beforeEach(() => {
+        server.use(
+            http.get(`${BASE_URL}/api/v1/notifications/unread-count`, () =>
+                HttpResponse.json({ statusCode: 200, message: 'ok', data: 0 }),
+            ),
+        );
+    });
+
     it('shows a login link when the user is not authenticated', () => {
         renderWithProviders(<Header />, { preloadedState: accountState({ isAuthenticated: false }) });
 
@@ -44,6 +54,18 @@ describe('Header', () => {
 
         expect(screen.getByText('Xin chào Alice')).toBeInTheDocument();
         expect(screen.queryByText('Đăng Nhập')).not.toBeInTheDocument();
+    });
+
+    it('shows links to saved jobs and applied jobs for an authenticated user', async () => {
+        renderWithProviders(<Header />, {
+            preloadedState: accountState({ isAuthenticated: true, name: 'Alice' }),
+        });
+
+        const user = userEvent.setup();
+        await user.click(screen.getByText('Xin chào Alice'));
+
+        expect(await screen.findByText('Việc làm đã lưu')).toBeInTheDocument();
+        expect(screen.getByText('Việc làm đã ứng tuyển')).toBeInTheDocument();
     });
 
     it('logs the user out and navigates home when "Đăng xuất" is clicked', async () => {

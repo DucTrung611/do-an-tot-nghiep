@@ -1,5 +1,5 @@
 import { Transform, Type } from 'class-transformer';
-import { IsArray, IsBoolean, IsDate, IsNotEmpty, IsNotEmptyObject, IsObject, IsString, ValidateNested } from 'class-validator';
+import { IsArray, IsBoolean, IsDate, IsNotEmpty, IsNotEmptyObject, IsNumber, IsObject, IsOptional, IsString, ValidateNested } from 'class-validator';
 import mongoose from 'mongoose';
 
 //data transfer object // class = { }
@@ -60,6 +60,14 @@ export class CreateJobDto {
     @IsNotEmpty({ message: 'isActive không được để trống', })
     @IsBoolean({ message: 'isActive có định dạng là boolean' })
     isActive: boolean;
+
+    @IsOptional()
+    @IsString({ message: 'jobType có định dạng là string' })
+    jobType?: string;
+
+    @IsOptional()
+    @IsNumber({}, { message: 'experienceYears có định dạng là number' })
+    experienceYears?: number;
 }
 
 

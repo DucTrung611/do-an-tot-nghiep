@@ -34,6 +34,37 @@ describe('SearchClient', () => {
         expect(onSearch).toHaveBeenCalledWith('skills=/REACT\\.JS/i');
     });
 
+    it('appends an encoded keyword, jobType, salary range, and experience to the query', async () => {
+        const onSearch = vi.fn();
+        const { container } = render(<SearchClient onSearch={onSearch} />);
+
+        const user = userEvent.setup();
+        await user.type(container.querySelector('input#keyword') as Element, 'react dev');
+
+        const jobTypeInput = container.querySelector('input#jobType') as Element;
+        await user.click(jobTypeInput);
+        await user.click(await screen.findByTitle('Remote'));
+        await user.keyboard('{Escape}');
+
+        const salaryInput = container.querySelector('input#salaryRange') as Element;
+        await user.click(salaryInput);
+        await user.click(await screen.findByTitle('10 - 20 triệu'));
+
+        const expInput = container.querySelector('input#experience') as Element;
+        await user.click(expInput);
+        await user.click(await screen.findByTitle('1 - 3 năm'));
+
+        await user.click(screen.getByRole('button', { name: 'Search' }));
+
+        const query = onSearch.mock.calls.at(-1)?.[0] as string;
+        expect(query).toContain('keyword=react%20dev');
+        expect(query).toContain('jobType=REMOTE');
+        expect(query).toContain('salaryMin=10000000');
+        expect(query).toContain('salaryMax=20000000');
+        expect(query).toContain('expMin=1');
+        expect(query).toContain('expMax=3');
+    });
+
     it('filters out the "ALL" location option from the query', async () => {
         const onSearch = vi.fn();
         const { container } = render(<SearchClient onSearch={onSearch} />);

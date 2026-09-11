@@ -3,10 +3,16 @@ import { ResumesService } from './resumes.service';
 import { ResumesController } from './resumes.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Resume, ResumeSchema } from './schemas/resume.schema';
+import { MailModule } from 'src/mail/mail.module';
+import { NotificationsModule } from 'src/notifications/notifications.module';
 
 @Module({
   controllers: [ResumesController],
   providers: [ResumesService],
-  imports: [MongooseModule.forFeature([{ name: Resume.name, schema: ResumeSchema }])],
+  imports: [
+    MongooseModule.forFeature([{ name: Resume.name, schema: ResumeSchema }]),
+    MailModule,
+    NotificationsModule
+  ],
 })
 export class ResumesModule { }

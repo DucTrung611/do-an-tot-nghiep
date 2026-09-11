@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { server } from '@/test/msw/server';
@@ -6,35 +6,39 @@ import { BASE_URL } from '@/test/msw/handlers';
 import { renderWithProviders } from '@/test/render';
 import DashboardPage from './dashboard';
 
-function paginateResponse(total: number) {
+// @ant-design/plots renders onto a <canvas> via @antv/g2, which jsdom cannot
+// provide a real 2D context for. Stub every chart component with a plain div
+// so the dashboard can be tested without a real canvas.
+vi.mock('@ant-design/plots', () => ({
+    Column: (props: any) => <div data-testid="chart-column">{JSON.stringify(props.data)}</div>,
+    Line: (props: any) => <div data-testid="chart-line">{JSON.stringify(props.data)}</div>,
+    Pie: (props: any) => <div data-testid="chart-pie">{JSON.stringify(props.data)}</div>,
+    Bar: (props: any) => <div data-testid="chart-bar">{JSON.stringify(props.data)}</div>,
+}));
+
+vi.setConfig({ testTimeout: 15000 });
+
+function statsResponse(overrides: Partial<Record<string, any>> = {}) {
     return HttpResponse.json({
         statusCode: 200,
         message: 'ok',
-        data: { meta: { current: 1, pageSize: 1, pages: total, total }, result: [] },
+        data: {
+            totals: { users: 10, jobs: 5, companies: 3, resumes: 7, activeJobs: 4, pendingResumes: 2 },
+            jobsByMonth: [{ month: '2026-01', count: 5 }],
+            applicationsByMonth: [{ month: '2026-01', count: 7 }],
+            resumesByStatus: [{ status: 'PENDING', count: 2 }, { status: 'APPROVED', count: 5 }],
+            topSkills: [{ skill: 'REACT.JS', count: 3 }],
+            jobsByLocation: [{ location: 'HANOI', count: 4 }],
+            topJobsByApplications: [{ jobId: 'j1', jobName: 'Backend Dev', companyName: 'ACME', count: 6 }],
+            salaryDistribution: [{ _id: 0, count: 1 }, { _id: '100tr+', count: 1 }],
+            ...overrides,
+        },
     });
-}
-
-function mockAllStats(totals: {
-    users: number;
-    jobs: number;
-    companies: number;
-    resumes: number;
-    permissions: number;
-    roles: number;
-}) {
-    server.use(
-        http.get(`${BASE_URL}/api/v1/users`, () => paginateResponse(totals.users)),
-        http.get(`${BASE_URL}/api/v1/jobs`, () => paginateResponse(totals.jobs)),
-        http.get(`${BASE_URL}/api/v1/companies`, () => paginateResponse(totals.companies)),
-        http.get(`${BASE_URL}/api/v1/resumes`, () => paginateResponse(totals.resumes)),
-        http.get(`${BASE_URL}/api/v1/permissions`, () => paginateResponse(totals.permissions)),
-        http.get(`${BASE_URL}/api/v1/roles`, () => paginateResponse(totals.roles)),
-    );
 }
 
 describe('DashboardPage', () => {
     it('shows loading skeletons while stats are being fetched, then renders the metric titles once loaded', async () => {
-        mockAllStats({ users: 10, jobs: 5, companies: 3, resumes: 7, permissions: 20, roles: 4 });
+        server.use(http.get(`${BASE_URL}/api/v1/stats/overview`, () => statsResponse()));
 
         renderWithProviders(<DashboardPage />);
 
@@ -46,26 +50,34 @@ describe('DashboardPage', () => {
         expect(screen.getByText('Total Jobs')).toBeInTheDocument();
         expect(screen.getByText('Total Companies')).toBeInTheDocument();
         expect(screen.getByText('Total Resumes')).toBeInTheDocument();
-        expect(screen.getByText('Total Permissions')).toBeInTheDocument();
-        expect(screen.getByText('Total Roles')).toBeInTheDocument();
+        expect(screen.getByText('Active Jobs')).toBeInTheDocument();
+        expect(screen.getByText('Pending Resumes')).toBeInTheDocument();
     });
 
-    it('requests each resource with current=1&pageSize=1', async () => {
-        let capturedUsersUrl = '';
+    it('requests the overview stats with a 12-month window', async () => {
+        let capturedUrl = '';
         server.use(
-            http.get(`${BASE_URL}/api/v1/users`, ({ request }) => {
-                capturedUsersUrl = request.url;
-                return paginateResponse(1);
+            http.get(`${BASE_URL}/api/v1/stats/overview`, ({ request }) => {
+                capturedUrl = request.url;
+                return statsResponse();
             }),
-            http.get(`${BASE_URL}/api/v1/jobs`, () => paginateResponse(0)),
-            http.get(`${BASE_URL}/api/v1/companies`, () => paginateResponse(0)),
-            http.get(`${BASE_URL}/api/v1/resumes`, () => paginateResponse(0)),
-            http.get(`${BASE_URL}/api/v1/permissions`, () => paginateResponse(0)),
-            http.get(`${BASE_URL}/api/v1/roles`, () => paginateResponse(0)),
         );
 
         renderWithProviders(<DashboardPage />);
 
-        await waitFor(() => expect(capturedUsersUrl).toContain('current=1&pageSize=1'));
+        await waitFor(() => expect(capturedUrl).toContain('months=12'));
+    });
+
+    it('renders every chart section and the top-jobs table once data arrives', async () => {
+        server.use(http.get(`${BASE_URL}/api/v1/stats/overview`, () => statsResponse()));
+
+        renderWithProviders(<DashboardPage />);
+
+        expect((await screen.findAllByTestId('chart-column')).length).toBeGreaterThan(0);
+        expect(screen.getByTestId('chart-line')).toBeInTheDocument();
+        expect(screen.getByTestId('chart-pie')).toBeInTheDocument();
+        expect(screen.getByTestId('chart-bar')).toBeInTheDocument();
+        expect(await screen.findByText('Backend Dev')).toBeInTheDocument();
+        expect(screen.getByText('ACME')).toBeInTheDocument();
     });
 });

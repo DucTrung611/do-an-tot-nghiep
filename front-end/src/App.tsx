@@ -31,11 +31,17 @@ import ClientJobDetailPage from './pages/job/detail';
 import CvMatchingPage from './pages/cv-matching';
 import ClientCompanyPage from './pages/company';
 import ClientCompanyDetailPage from './pages/company/detail';
+import SavedJobPage from './pages/job/saved';
+import AppliedJobPage from './pages/job/applied';
+import AuthRoute from './components/share/auth-route';
+import NotificationPage from './pages/notification';
+import { useNotificationSocket } from './hooks/useNotificationSocket';
 
 const LayoutClient = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const location = useLocation();
   const rootRef = useRef<HTMLDivElement>(null);
+  useNotificationSocket();
 
   useEffect(() => {
     if (rootRef && rootRef.current) {
@@ -80,7 +86,10 @@ export default function App() {
         { path: "job/:id", element: <ClientJobDetailPage /> },
         { path: "cv-matching", element: <CvMatchingPage /> },
         { path: "company", element: <ClientCompanyPage /> },
-        { path: "company/:id", element: <ClientCompanyDetailPage /> }
+        { path: "company/:id", element: <ClientCompanyDetailPage /> },
+        { path: "saved-jobs", element: <AuthRoute><SavedJobPage /></AuthRoute> },
+        { path: "applied-jobs", element: <AuthRoute><AppliedJobPage /></AuthRoute> },
+        { path: "notifications", element: <AuthRoute><NotificationPage /></AuthRoute> }
       ],
     },
 

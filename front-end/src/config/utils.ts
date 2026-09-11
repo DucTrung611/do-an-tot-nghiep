@@ -128,6 +128,49 @@ export const getLocationName = (value: string) => {
     return 'unknown'
 }
 
+export const JOB_TYPE_LIST = [
+    { label: "Toàn thời gian", value: "FULL_TIME" },
+    { label: "Bán thời gian", value: "PART_TIME" },
+    { label: "Hợp đồng", value: "CONTRACT" },
+    { label: "Thực tập", value: "INTERNSHIP" },
+    { label: "Remote", value: "REMOTE" },
+]
+
+export const getJobTypeName = (value?: string) => {
+    const found = JOB_TYPE_LIST.find(item => item.value === value);
+    return found ? found.label : value;
+}
+
+export const EXPERIENCE_LIST: { label: string; value: string; expMin?: number; expMax?: number }[] = [
+    { label: "Chưa có kinh nghiệm", value: "0-0", expMin: 0, expMax: 0 },
+    { label: "Dưới 1 năm", value: "0-1", expMin: 0, expMax: 1 },
+    { label: "1 - 3 năm", value: "1-3", expMin: 1, expMax: 3 },
+    { label: "3 - 5 năm", value: "3-5", expMin: 3, expMax: 5 },
+    { label: "Trên 5 năm", value: "5+", expMin: 5 },
+]
+
+export const SALARY_RANGE_LIST: { label: string; value: string; salaryMin?: number; salaryMax?: number }[] = [
+    { label: "Dưới 10 triệu", value: "0-10", salaryMax: 10_000_000 },
+    { label: "10 - 20 triệu", value: "10-20", salaryMin: 10_000_000, salaryMax: 20_000_000 },
+    { label: "20 - 30 triệu", value: "20-30", salaryMin: 20_000_000, salaryMax: 30_000_000 },
+    { label: "30 - 50 triệu", value: "30-50", salaryMin: 30_000_000, salaryMax: 50_000_000 },
+    { label: "Trên 50 triệu", value: "50+", salaryMin: 50_000_000 },
+]
+
+export const RESUME_STATUS_LABEL: Record<string, string> = {
+    PENDING: "Chờ duyệt",
+    REVIEWING: "Đang xem xét",
+    APPROVED: "Đã chấp nhận",
+    REJECTED: "Đã từ chối",
+}
+
+export const RESUME_STATUS_COLOR: Record<string, string> = {
+    PENDING: "gold",
+    REVIEWING: "blue",
+    APPROVED: "green",
+    REJECTED: "red",
+}
+
 export function colorMethod(method: "POST" | "PUT" | "GET" | "DELETE" | string) {
     switch (method) {
         case "POST":

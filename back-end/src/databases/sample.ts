@@ -517,6 +517,70 @@ export const INIT_PERMISSIONS = [
         "createdAt": "2023-06-15T09:13:52.798Z",
         "updatedAt": "2023-06-15T09:13:52.798Z",
         "__v": 0
+    },
+    {
+        "_id": "68c2a415f4328bd3153ee301",
+        "name": "Save a job",
+        "apiPath": "/api/v1/saved-jobs",
+        "method": "POST",
+        "module": "SAVED_JOBS",
+        "createdBy": {
+            "_id": "647b5108a8a243e8191855b5",
+            "email": "thanductrung@gmail.com"
+        },
+        "isDeleted": false,
+        "deletedAt": null,
+        "createdAt": "2023-06-15T09:13:52.798Z",
+        "updatedAt": "2023-06-15T09:13:52.798Z",
+        "__v": 0
+    },
+    {
+        "_id": "68c2a415f4328bd3153ee302",
+        "name": "Fetch saved jobs with paginate",
+        "apiPath": "/api/v1/saved-jobs",
+        "method": "GET",
+        "module": "SAVED_JOBS",
+        "createdBy": {
+            "_id": "647b5108a8a243e8191855b5",
+            "email": "thanductrung@gmail.com"
+        },
+        "isDeleted": false,
+        "deletedAt": null,
+        "createdAt": "2023-06-15T09:13:52.798Z",
+        "updatedAt": "2023-06-15T09:13:52.798Z",
+        "__v": 0
+    },
+    {
+        "_id": "68c2a415f4328bd3153ee303",
+        "name": "Fetch saved job ids",
+        "apiPath": "/api/v1/saved-jobs/ids",
+        "method": "GET",
+        "module": "SAVED_JOBS",
+        "createdBy": {
+            "_id": "647b5108a8a243e8191855b5",
+            "email": "thanductrung@gmail.com"
+        },
+        "isDeleted": false,
+        "deletedAt": null,
+        "createdAt": "2023-06-15T09:13:52.798Z",
+        "updatedAt": "2023-06-15T09:13:52.798Z",
+        "__v": 0
+    },
+    {
+        "_id": "68c2a415f4328bd3153ee304",
+        "name": "Unsave a job",
+        "apiPath": "/api/v1/saved-jobs/:jobId",
+        "method": "DELETE",
+        "module": "SAVED_JOBS",
+        "createdBy": {
+            "_id": "647b5108a8a243e8191855b5",
+            "email": "thanductrung@gmail.com"
+        },
+        "isDeleted": false,
+        "deletedAt": null,
+        "createdAt": "2023-06-15T09:13:52.798Z",
+        "updatedAt": "2023-06-15T09:13:52.798Z",
+        "__v": 0
     }
 ]
 

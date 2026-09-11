@@ -83,6 +83,40 @@ describe('MailService', () => {
         });
     });
 
+    describe('sendResumeStatusUpdate', () => {
+        it('does nothing when there is no recipient email', async () => {
+            await service.sendResumeStatusUpdate({ to: '' } as any);
+
+            expect(mailerService.sendMail).not.toHaveBeenCalled();
+        });
+
+        it('sends the resume-status template with a Vietnamese status label', async () => {
+            await service.sendResumeStatusUpdate({
+                to: 'candidate@b.com',
+                jobName: 'Backend Dev',
+                companyName: 'ACME',
+                status: 'APPROVED',
+                updatedAt: new Date('2026-01-01T00:00:00Z'),
+            });
+
+            expect(mailerService.sendMail).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    to: 'candidate@b.com',
+                    template: 'resume-status',
+                    context: expect.objectContaining({
+                        jobName: 'Backend Dev',
+                        companyName: 'ACME',
+                        status: 'APPROVED',
+                        statusLabel: 'Đã chấp nhận',
+                        updatedAt: expect.any(String),
+                        url: expect.any(String),
+                        receiver: 'candidate@b.com',
+                    }),
+                }),
+            );
+        });
+    });
+
     describe('sendJobsToAllSubscribers', () => {
         it('sends to every subscriber and keeps going if one fails', async () => {
             subscriberModel.find.mockResolvedValue([

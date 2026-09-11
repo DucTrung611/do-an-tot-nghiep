@@ -5,6 +5,13 @@ import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { Subscriber, SubscriberDocument } from 'src/subscribers/schemas/subscriber.schema';
 import { Job, JobDocument } from 'src/jobs/schemas/job.schema';
 
+export const RESUME_STATUS_LABEL: Record<string, string> = {
+  PENDING: 'Chờ duyệt',
+  REVIEWING: 'Đang xem xét',
+  APPROVED: 'Đã chấp nhận',
+  REJECTED: 'Đã từ chối',
+};
+
 @Injectable()
 export class MailService {
   private readonly logger = new Logger(MailService.name);
@@ -61,6 +68,38 @@ export class MailService {
       context: {
         receiver: subscriber.name || subscriber.email,
         jobs: jobDtos,
+      },
+    });
+  }
+
+  /**
+   * Báo cho ứng viên khi HR đổi trạng thái hồ sơ.
+   * Handlebars chạy strict:true nên mọi biến trong template phải có mặt ở context.
+   */
+  async sendResumeStatusUpdate(payload: {
+    to: string;
+    jobName: string;
+    companyName: string;
+    status: string;
+    updatedAt: Date;
+  }) {
+    if (!payload?.to) return;
+
+    const statusLabel = RESUME_STATUS_LABEL[payload.status] ?? payload.status;
+
+    await this.mailerService.sendMail({
+      to: payload.to,
+      from: '"JobConnect" <no-reply@jobconnect.local>',
+      subject: `Cập nhật hồ sơ ứng tuyển: ${payload.jobName || 'Hồ sơ của bạn'}`,
+      template: 'resume-status',
+      context: {
+        receiver: payload.to,
+        jobName: payload.jobName || '(không rõ vị trí)',
+        companyName: payload.companyName || '(không rõ công ty)',
+        status: payload.status,
+        statusLabel,
+        updatedAt: payload.updatedAt.toLocaleString('vi-VN'),
+        url: 'http://localhost:3000/applied-jobs',
       },
     });
   }
