@@ -170,3 +170,60 @@ export interface ISubscribers {
     createdAt?: string;
     updatedAt?: string;
 }
+
+export interface ICvProfile {
+    fullName: string;
+    email: string;
+    phone: string;
+    currentTitle: string;
+    summary: string;
+    yearsOfExperience: number;
+    level: string;
+    /** Skill đã map về SKILLS_LIST của hệ thống. */
+    skills: string[];
+    /** Skill nguyên văn trong CV, kể cả cái không map được. */
+    rawSkills: string[];
+    locations: string[];
+    education: {
+        school: string;
+        degree: string;
+        major: string;
+        year: string;
+    }[];
+    experiences: {
+        company: string;
+        title: string;
+        from: string;
+        to: string;
+        description: string;
+    }[];
+    languages: string[];
+}
+
+export interface ICvJobMatch {
+    jobId: string;
+    jobName: string;
+    companyName: string;
+    /** 0-100 */
+    score: number;
+    reason: string;
+    matchedSkills: string[];
+    missingSkills: string[];
+}
+
+export interface ICvAnalysis {
+    _id?: string;
+    email: string;
+    userId: string;
+    fileName: string;
+    fileType: string;
+    model: string;
+    candidateJobCount: number;
+    profile: ICvProfile;
+    matches: ICvJobMatch[];
+    createdBy?: { _id: string; email: string };
+    isDeleted?: boolean;
+    deletedAt?: boolean | null;
+    createdAt?: string;
+    updatedAt?: string;
+}

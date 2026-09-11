@@ -1,4 +1,4 @@
-import { IBackendRes, ICompany, IAccount, IUser, IModelPaginate, IGetAccount, IJob, IResume, IPermission, IRole, ISubscribers } from '@/types/backend';
+import { IBackendRes, ICompany, IAccount, IUser, IModelPaginate, IGetAccount, IJob, IResume, IPermission, IRole, ISubscribers, ICvAnalysis } from '@/types/backend';
 import axios from 'config/axios-customize';
 
 /**
@@ -230,3 +230,30 @@ export const callFetchSubscriberById = (id: string) => {
     return axios.get<IBackendRes<ISubscribers>>(`/api/v1/subscribers/${id}`);
 }
 
+
+/**
+ * 
+Module CV Matching (AI đọc CV và gợi ý việc làm)
+ */
+export const callAnalyzeCv = (file: any) => {
+    const bodyFormData = new FormData();
+    bodyFormData.append('fileUpload', file);
+    return axios<IBackendRes<ICvAnalysis>>({
+        method: 'post',
+        url: '/api/v1/cv-matching/analyze',
+        data: bodyFormData,
+        headers: {
+            "Content-Type": "multipart/form-data"
+        },
+        // Hai lượt gọi AI nối tiếp nhau, thực tế mất 15-40s.
+        timeout: 120000,
+    });
+}
+
+export const callFetchCvHistory = () => {
+    return axios.get<IBackendRes<ICvAnalysis[]>>(`/api/v1/cv-matching/history`);
+}
+
+export const callFetchCvAnalysisById = (id: string) => {
+    return axios.get<IBackendRes<ICvAnalysis>>(`/api/v1/cv-matching/${id}`);
+}

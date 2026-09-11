@@ -322,3 +322,31 @@
         }
     }
 }
+.cv-matching-section {
+    padding-bottom: 40px;
+
+    .title {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 600;
+        color: #1f1f1f;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    :global(.ant-card) {
+        border-radius: 8px;
+    }
+
+    // Card job trong danh sách kết quả: gợi ý rằng cả thẻ đều bấm được.
+    :global(.ant-card-hoverable) {
+        cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+        .title {
+            font-size: 20px;
+        }
+    }
+}

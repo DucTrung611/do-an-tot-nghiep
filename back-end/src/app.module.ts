@@ -18,6 +18,7 @@ import { MailModule } from './mail/mail.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { HealthModule } from './health/health.module';
+import { CvMatchingModule } from './cv-matching/cv-matching.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { HealthModule } from './health/health.module';
     JobsModule,
     FilesModule,
     ResumesModule,
+    CvMatchingModule,
     PermissionsModule,
     RolesModule,
     DatabasesModule,

@@ -28,6 +28,7 @@ import JobPage from './pages/admin/job';
 import ViewUpsertJob from './components/admin/job/upsert.job';
 import ClientJobPage from './pages/job';
 import ClientJobDetailPage from './pages/job/detail';
+import CvMatchingPage from './pages/cv-matching';
 import ClientCompanyPage from './pages/company';
 import ClientCompanyDetailPage from './pages/company/detail';
 
@@ -77,6 +78,7 @@ export default function App() {
         { index: true, element: <HomePage /> },
         { path: "job", element: <ClientJobPage /> },
         { path: "job/:id", element: <ClientJobDetailPage /> },
+        { path: "cv-matching", element: <CvMatchingPage /> },
         { path: "company", element: <ClientCompanyPage /> },
         { path: "company/:id", element: <ClientCompanyDetailPage /> }
       ],

@@ -7,6 +7,7 @@ import {
     MenuFoldOutlined,
     RiseOutlined,
     TwitterOutlined,
+    RobotOutlined,
 } from "@ant-design/icons";
 import { Avatar, Drawer, Dropdown, MenuProps, Space, message } from "antd";
 import { Menu, ConfigProvider } from "antd";
@@ -55,6 +56,11 @@ const Header = (props: any) => {
             label: <Link to={"/company"}>Top Công ty IT</Link>,
             key: "/company",
             icon: <RiseOutlined />,
+        },
+        {
+            label: <Link to={"/cv-matching"}>Gợi ý việc làm bằng AI</Link>,
+            key: "/cv-matching",
+            icon: <RobotOutlined />,
         },
     ];
 
