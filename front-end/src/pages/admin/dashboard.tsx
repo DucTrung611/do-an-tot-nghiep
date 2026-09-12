@@ -124,8 +124,8 @@ const DashboardPage = () => {
                         <Skeleton loading={isLoading} active>
                             <Bar
                                     data={stats.topSkills}
-                                    xField="count"
-                                    yField="skill"
+                                    xField="skill"
+                                    yField="count"
                                     height={260}
                                 />
                         </Skeleton>

@@ -29,7 +29,11 @@ export class StatsService {
             throw new ForbiddenException('Bạn không có quyền xem thống kê');
         }
 
-        const companyId = isSuperAdmin ? null : user?.company?._id;
+        // Tài khoản công ty nhưng thiếu company._id thì phải KHÔNG thấy gì cả,
+        // chứ không được rơi về phạm vi toàn hệ thống (xem jobs.service.findAll,
+        // nơi trường hợp này được chặn bằng `?? null`).
+        const isCompanyUser = !isSuperAdmin && !isNormalUser;
+        const companyId = isCompanyUser ? (user?.company?._id ?? null) : null;
 
         // `company` là plain Object nên `_id` có thể được lưu là string hoặc
         // ObjectId tuỳ nơi tạo ra job (xem jobs.service.ts) — phải match cả hai.
@@ -45,15 +49,19 @@ export class StatsService {
         // tự loại bản ghi đã xoá mềm.
         const jobMatch: Record<string, any> = { isDeleted: { $ne: true } };
         const resumeMatch: Record<string, any> = { isDeleted: { $ne: true } };
-        if (companyId) {
+        // companyIdCandidates rỗng => `$in: []` không khớp bản ghi nào, đúng ý đồ.
+        if (isCompanyUser) {
             jobMatch['company._id'] = { $in: companyIdCandidates };
             resumeMatch.companyId = { $in: companyIdCandidates };
         }
 
+        // setDate(1) PHẢI chạy trước setMonth(): nếu hôm nay là ngày 29-31 thì
+        // setMonth() trên ngày đó sẽ tràn sang tháng kế tiếp (vd 31/03 lùi 11
+        // tháng => "31/04" => 01/05), khiến cửa sổ thống kê lệch đúng 1 tháng.
         const from = new Date();
         from.setHours(0, 0, 0, 0);
-        from.setMonth(from.getMonth() - (months - 1));
         from.setDate(1);
+        from.setMonth(from.getMonth() - (months - 1));
 
         const [
             jobsByMonth,
@@ -133,7 +141,7 @@ export class StatsService {
                 },
             ]),
 
-            this.getTotals(jobMatch, resumeMatch, companyId, companyIdCandidates),
+            this.getTotals(isCompanyUser, companyIdCandidates),
         ]);
 
         return {
@@ -149,19 +157,17 @@ export class StatsService {
     }
 
     private async getTotals(
-        jobMatch: Record<string, any>,
-        resumeMatch: Record<string, any>,
-        companyId: string | undefined | null,
+        isCompanyUser: boolean,
         companyIdCandidates: (string | mongoose.Types.ObjectId)[],
     ) {
         // countDocuments (không phải aggregate) để plugin soft-delete tự áp dụng.
-        const jobFilter: Record<string, any> = companyId ? { 'company._id': { $in: companyIdCandidates } } : {};
-        const resumeFilter: Record<string, any> = companyId ? { companyId: { $in: companyIdCandidates } } : {};
+        const jobFilter: Record<string, any> = isCompanyUser ? { 'company._id': { $in: companyIdCandidates } } : {};
+        const resumeFilter: Record<string, any> = isCompanyUser ? { companyId: { $in: companyIdCandidates } } : {};
 
         const [users, jobs, companies, resumes, activeJobs, pendingResumes] = await Promise.all([
-            companyId ? Promise.resolve(0) : this.userModel.countDocuments({}),
+            isCompanyUser ? Promise.resolve(0) : this.userModel.countDocuments({}),
             this.jobModel.countDocuments(jobFilter),
-            companyId ? Promise.resolve(1) : this.companyModel.countDocuments({}),
+            isCompanyUser ? Promise.resolve(1) : this.companyModel.countDocuments({}),
             this.resumeModel.countDocuments(resumeFilter),
             this.jobModel.countDocuments({ ...jobFilter, isActive: true }),
             this.resumeModel.countDocuments({ ...resumeFilter, status: 'PENDING' }),

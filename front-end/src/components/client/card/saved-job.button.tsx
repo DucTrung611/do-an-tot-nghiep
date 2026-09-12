@@ -45,24 +45,37 @@ const SavedJobButton = (props: IProps) => {
         if (isSubmitting) return;
         setIsSubmitting(true);
 
-        // optimistic update, rollback nếu API báo lỗi
-        if (isSaved) {
-            dispatch(removeSavedId(jobId));
-            const res = await callUnsaveJob(jobId);
-            if (!res.data) {
-                dispatch(addSavedId(jobId));
-                notification.error({ message: "Có lỗi xảy ra", description: res.message });
-            }
-        } else {
-            dispatch(addSavedId(jobId));
-            const res = await callSaveJob(jobId);
-            if (!res.data) {
-                dispatch(removeSavedId(jobId));
-                notification.error({ message: "Có lỗi xảy ra", description: res.message });
-            }
-        }
+        // optimistic update, rollback nếu API báo lỗi.
+        // Bọc try/catch/finally: lỗi tầng network (mất mạng, CORS, timeout) làm
+        // promise reject chứ không trả về res, nếu không bắt thì vừa không
+        // rollback được trạng thái tim, vừa kẹt isSubmitting = true vĩnh viễn.
+        const rollback = () => dispatch(isSaved ? addSavedId(jobId) : removeSavedId(jobId));
 
-        setIsSubmitting(false);
+        try {
+            if (isSaved) {
+                dispatch(removeSavedId(jobId));
+                const res = await callUnsaveJob(jobId);
+                if (!res.data) {
+                    rollback();
+                    notification.error({ message: "Có lỗi xảy ra", description: res.message });
+                }
+            } else {
+                dispatch(addSavedId(jobId));
+                const res = await callSaveJob(jobId);
+                if (!res.data) {
+                    rollback();
+                    notification.error({ message: "Có lỗi xảy ra", description: res.message });
+                }
+            }
+        } catch (err) {
+            rollback();
+            notification.error({
+                message: "Có lỗi xảy ra",
+                description: "Không kết nối được tới máy chủ, vui lòng thử lại.",
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (

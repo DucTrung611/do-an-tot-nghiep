@@ -15,6 +15,12 @@ const NOTIFICATION_TYPE_LABEL: Record<string, string> = {
     NEW_JOB_MATCH: "Việc làm mới",
 };
 
+// Chuông thông báo ở header dùng chung slice này nhưng fetch với pageSize khác
+// (8), nên `meta` trong redux không phản ánh phân trang của trang này => pager
+// phải bám vào state cục bộ, nếu không mở chuông sẽ ghi đè meta và bấm lại đúng
+// số trang cũ sẽ không fetch nữa.
+const PAGE_SIZE = 10;
+
 const NotificationPage = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -22,7 +28,7 @@ const NotificationPage = () => {
     const [current, setCurrent] = useState(1);
 
     useEffect(() => {
-        dispatch(fetchNotification({ query: `current=${current}&pageSize=10&sort=-createdAt` }));
+        dispatch(fetchNotification({ query: `current=${current}&pageSize=${PAGE_SIZE}&sort=-createdAt` }));
     }, [current, dispatch]);
 
     const handleClick = (item: INotification) => {
@@ -69,9 +75,9 @@ const NotificationPage = () => {
                 />
                 <div style={{ marginTop: 20, textAlign: "center" }}>
                     <Pagination
-                        current={meta.current}
+                        current={current}
                         total={meta.total}
-                        pageSize={meta.pageSize}
+                        pageSize={PAGE_SIZE}
                         onChange={setCurrent}
                     />
                 </div>

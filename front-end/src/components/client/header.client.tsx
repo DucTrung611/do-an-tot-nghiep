@@ -22,6 +22,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { callLogout } from "@/config/api";
 import { setLogoutAction } from "@/redux/slice/accountSlide";
 import { resetNotification } from "@/redux/slice/notificationSlide";
+import { resetSavedJob } from "@/redux/slice/savedJobSlide";
 import ManageAccount from "./modal/manage.account";
 import NotificationBell from "./notification.bell";
 
@@ -77,6 +78,7 @@ const Header = (props: any) => {
         if (res && res.data) {
             dispatch(setLogoutAction({}));
             dispatch(resetNotification());
+            dispatch(resetSavedJob());
             message.success("Đăng xuất thành công");
             navigate("/");
         }

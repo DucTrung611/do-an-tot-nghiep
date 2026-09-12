@@ -44,7 +44,12 @@ const JobCard = (props: IProps) => {
         if (filterQuery) {
             query += `&${filterQuery}`;
         }
-        if (sortQuery) {
+        // Khi có tìm kiếm full-text, KHÔNG gửi sort mặc định: backend chỉ sắp xếp
+        // theo độ liên quan ($meta textScore) khi client không chỉ định sort
+        // (xem jobs.service.findAll). Luôn gửi sort=-updatedAt sẽ vô hiệu hoá
+        // hoàn toàn việc xếp hạng theo độ khớp từ khoá.
+        const hasKeyword = /(^|&)keyword=/.test(filterQuery ?? "");
+        if (sortQuery && !hasKeyword) {
             query += `&${sortQuery}`;
         }
 

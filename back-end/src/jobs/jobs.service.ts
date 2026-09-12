@@ -58,6 +58,10 @@ export class JobsService {
   private async notifyMatchingSubscribers(job: JobDocument) {
     if (!job?.skills?.length) return;
 
+    // Job nháp (isActive: false) chưa public: findOne() sẽ từ chối trả về cho
+    // ứng viên, nên gửi thông báo sẽ dẫn họ tới một trang không xem được.
+    if (job.isActive === false) return;
+
     const subscribers = await this.subscriberModel
       .find({ skills: { $in: job.skills } })
       .select({ email: 1 })

@@ -57,6 +57,9 @@ export const savedJobSlide = createSlice({
         removeSavedId: (state, action: PayloadAction<string>) => {
             state.savedIds = state.savedIds.filter(id => id !== action.payload);
         },
+        // gọi khi logout: nếu không xoá, savedIds của user cũ vẫn còn và user
+        // đăng nhập kế tiếp sẽ thấy các job hiện tim đỏ không phải của mình
+        resetSavedJob: () => initialState,
     },
     extraReducers: (builder) => {
         builder.addCase(fetchSavedJob.pending, (state) => {
@@ -88,6 +91,7 @@ export const savedJobSlide = createSlice({
 export const {
     addSavedId,
     removeSavedId,
+    resetSavedJob,
 } = savedJobSlide.actions;
 
 export default savedJobSlide.reducer;
